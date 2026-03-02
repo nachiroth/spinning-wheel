@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Spinning Wheel",
+    "description": "Material Design 3 spinning wheel for decision making"
+  },
+  "controls": {
+    "spin": "Spin",
+    "mute": "Mute sound",
+    "unmute": "Unmute sound",
+    "eliminateMode": "Elimination mode",
+    "disableEliminate": "Disable elimination mode",
+    "enableEliminate": "Enable elimination mode",
+    "fullscreen": "Enter fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "settings": "Settings",
+    "language": "Language"
+  },
+  "settings": {
+    "title": "Settings",
+    "close": "Close settings",
+    "colorPalette": "Color Palette",
+    "newOption": "New option...",
+    "add": "Add",
+    "remove": "Remove",
+    "reset": "Reset",
+    "restart": "Restart",
+    "noOptions": "No more options available"
+  },
+  "palettes": {
+    "vibrantSunset": "Vibrant Sunset",
+    "electricNight": "Electric Night",
+    "tropicalForest": "Tropical Forest",
+    "berryPunch": "Berry Punch"
+  },
+  "victory": {
+    "title": "Winner!",
+    "continue": "Continue",
+    "celebration": "Celebration"
+  },
+  "gameOver": {
+    "title": "Game Complete!",
+    "message": "All options have been eliminated",
+    "playAgain": "Play Again"
+  },
+  "language": {
+    "english": "English",
+    "spanish": "Español",
+    "switch": "Switch language"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Ruleta Giratoria",
+  "productName": "Spinning Wheel",
   "version": "1.0.0",
   "identifier": "com.jir.spinning-wheel",
   "build": {
@@ -12,18 +12,20 @@
   "app": {
     "windows": [
       {
-        "title": "Ruleta",
+        "title": "Spinning Wheel",
         "width": 1400,
         "height": 900,
         "minWidth": 1024,
         "minHeight": 700,
         "resizable": true,
         "center": true,
-        "fullscreen": false
+        "fullscreen": false,
+        "decorations": true,
+        "transparent": false
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost data: blob:; media-src 'self' asset: https://asset.localhost blob:; audio-src 'self' asset: https://asset.localhost blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' asset: https://asset.localhost;"
     }
   },
   "bundle": {
@@ -37,6 +39,44 @@
       "icons/icon.ico"
     ],
     "category": "Game",
-    "shortDescription": "Una ruleta giratoria con opciones configurables"
+    "shortDescription": "A Material Design 3 spinning wheel for decision making",
+    "longDescription": "Spinning Wheel is a beautiful Material Design 3 application for making decisions through random selection. Features include customizable options, multiple color palettes, sound effects, elimination mode, and fullscreen support for presentations.",
+    "resources": [],
+    "externalBin": [],
+    "copyright": "MIT License",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "wix": null,
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["English", "Spanish"],
+        "displayLanguageSelector": true
+      }
+    },
+    "macOS": {
+      "entitlements": null,
+      "exceptionDomain": "",
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null,
+      "minimumSystemVersion": "10.15"
+    },
+    "linux": {
+      "deb": {
+        "depends": [],
+        "files": {}
+      },
+      "appimage": {
+        "bundleMediaFramework": false,
+        "files": {}
+      },
+      "rpm": {
+        "epoch": 0,
+        "release": "1",
+        "depends": []
+      }
+    }
   }
 }
