@@ -59,6 +59,7 @@ export interface WheelPalette {
 
 /**
  * Pre-defined Professional Palettes
+ * Optimized for projector visibility and fun aesthetics
  */
 export const WHEEL_PALETTES: WheelPalette[] = [
   {
@@ -67,7 +68,7 @@ export const WHEEL_PALETTES: WheelPalette[] = [
     colors: [
       "#FF5722", // Deep Orange
       "#FFC107", // Amber
-      "#D32F2F", // Deep Red
+      "#FF3D00", // Bright Red-Orange
       "#FF9800", // Warm Orange
       "#FFEB3B", // Bright Yellow
       "#FF7043", // Light Deep Orange
@@ -91,13 +92,13 @@ export const WHEEL_PALETTES: WheelPalette[] = [
   },
   {
     name: "Tropical Forest",
-    seedColor: "#006A6A",
+    seedColor: "#00BFA5",
     colors: [
-      "#006A6A", // Emerald Green
+      "#00BFA5", // Bright Teal
       "#00897B", // Teal
       "#C0CA33", // Lime
       "#4CAF50", // Green
-      "#009688", // Medium Teal
+      "#00E676", // Bright Green
       "#8BC34A", // Light Green
     ],
     background: "#1C1B1F",
@@ -117,12 +118,26 @@ export const WHEEL_PALETTES: WheelPalette[] = [
     background: "#1C1B1F",
     surface: "#2A2328",
   },
+  {
+    name: "Fiesta",
+    seedColor: "#FF1744",
+    colors: [
+      "#FF1744", // Hot Red
+      "#FF6D00", // Blazing Orange
+      "#FFD600", // Electric Yellow
+      "#00E5FF", // Neon Cyan
+      "#76FF03", // Neon Green
+      "#D500F9", // Neon Purple
+    ],
+    background: "#0D0D0D",
+    surface: "#1A1A2E",
+  },
 ];
 
 /**
  * Default dark theme color scheme
  */
-export const darkTheme: M3ColorScheme = {
+export const defaultTheme: M3ColorScheme = {
   primary: "#FFB585",
   onPrimary: "#5C2E00",
   primaryContainer: "#CC5600",
@@ -154,41 +169,6 @@ export const darkTheme: M3ColorScheme = {
   shadow: "#000000",
   scrim: "#000000",
 };
-
-export const lightTheme: M3ColorScheme = {
-  primary: "#CC5600",
-  onPrimary: "#FFFFFF",
-  primaryContainer: "#FFDCC3",
-  onPrimaryContainer: "#4A1E00",
-  secondary: "#CC9A00",
-  onSecondary: "#332800",
-  secondaryContainer: "#FFE9B0",
-  onSecondaryContainer: "#3D3100",
-  tertiary: "#CC1F5E",
-  onTertiary: "#FFFFFF",
-  tertiaryContainer: "#FFD9E6",
-  onTertiaryContainer: "#5C0027",
-  error: "#BA1A1A",
-  onError: "#FFFFFF",
-  errorContainer: "#FFDAD6",
-  onErrorContainer: "#410002",
-  background: "#FFFBFF",
-  onBackground: "#1C1B1F",
-  surface: "#FFFBFF",
-  onSurface: "#1C1B1F",
-  surfaceVariant: "#F0E0DC",
-  onSurfaceVariant: "#4F4542",
-  surfaceTint: "#CC5600",
-  outline: "#817571",
-  outlineVariant: "#D3C4BF",
-  inverseSurface: "#313033",
-  inverseOnSurface: "#F4EFF0",
-  inversePrimary: "#FFB585",
-  shadow: "#000000",
-  scrim: "#000000",
-};
-
-export const defaultTheme = darkTheme;
 
 /**
  * M3 Elevation shadows

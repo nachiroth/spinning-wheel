@@ -1,12 +1,16 @@
-# Spinning Wheel - User Guide
+# User Guide — Spinning Wheel 🎡
+
+## Language
+
+[🇬🇧 English](USER_GUIDE.md) | [🇪🇸 Español](USER_GUIDE.es.md)
 
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
 2. [Interface Overview](#interface-overview)
 3. [Basic Usage](#basic-usage)
-4. [Settings & Customization](#settings--customization)
-5. [Language Settings](#language-settings)
+4. [Settings](#settings)
+5. [Language](#language)
 6. [Advanced Features](#advanced-features)
 7. [Tips for Presentations](#tips-for-presentations)
 8. [Troubleshooting](#troubleshooting)
@@ -15,40 +19,37 @@
 
 ## Getting Started
 
-### First Launch
+### When you first open the app:
 
-When you first open Spinning Wheel, you'll see:
-
-- **The Wheel**: Center of screen with 6 default options
-- **Spin Button**: Large floating button below the wheel
+- **The Wheel**: Center screen with 6 sample challenges
+- **Spin Button**: Floating below the wheel
 - **Top Controls**: Five icons in the top-right corner
 
 ### Interface Overview
 
 ```
 ┌──────────────────────────────────────────┐
-│                    🇬🇧 🔊 🗑️ ⛶ ⚙️          │  ← Top Controls
+│                    🌐 🔊 🔄 ⛶ ⚙️          │  ← Controls
 │                                          │
 │              ┌─────────────┐             │
-│              │             │             │
-│              │    WHEEL    │             │  ← Pointer (▲)
+│              │             │   ▲         │  ← Pointer
+│              │    WHEEL    │             │
 │              │             │             │
 │              └─────────────┘             │
-│                 ▲                        │
 │                                          │
-│            [ SPIN ]                      │  ← FAB Button
+│            [ Spin! ]                     │  ← FAB Button
 │                                          │
 └──────────────────────────────────────────┘
 ```
 
-### Top Controls (Left to Right)
+### Top Controls
 
 | Icon | Name | Function |
 |------|------|----------|
-| 🇬🇧/🇪🇸 | Language | Toggle English/Spanish |
+| 🌐 | Language | Toggle English/Spanish |
 | 🔊/🔇 | Sound | Mute/Unmute audio |
-| 🗑️ | Eliminate | Enable/disable elimination mode |
-| ⛶ | Fullscreen | Enter/exit fullscreen |
+| 🔄 | Turn Mode | Enable/disable turn rotation |
+| ⛶ | Fullscreen | Enter/exit fullscreen mode |
 | ⚙️ | Settings | Open/close settings panel |
 
 ---
@@ -57,293 +58,165 @@ When you first open Spinning Wheel, you'll see:
 
 ### Spinning the Wheel
 
-1. **Click the "Spin" button** (or press `Enter`)
-2. Wheel spins with anticipation animation
-3. Wait for wheel to stop
-4. Victory screen appears with confetti
-5. Click "Continue" to reset
+1. **Click "Spin!"** (or press `Enter`)
+2. Wheel spins with brief anticipation animation
+3. When it stops, selected challenge appears large with confetti 🎊
+4. Click **"Continue"** to return to the wheel
 
-### Adding New Options
+### Adding Challenges
 
 1. Click **Settings** (⚙️)
-2. Type option in "New option..." field
-3. Click "+" or press `Enter`
-4. Repeat for more options
-5. Close settings when done
+2. Type challenge in "New challenge..." field
+3. Click "Add" or press `Enter`
+4. Maximum 30 characters per challenge
 
-### Removing Options
+### Removing Challenges
 
-**Single Option:**
 1. Open Settings
-2. Click trash icon next to option
+2. Click trash icon next to challenge
 
-**After Spin (Elimination Mode):**
-1. Enable Elimination Mode (🗑️)
-2. Spin wheel
-3. Winner automatically eliminated
+### Editing Challenges
+
+1. Open Settings
+2. Click directly on challenge text
+3. Type new text (saves automatically)
 
 ---
 
-## Settings & Customization
-
-### Opening Settings
-
-Click the **Settings icon** (⚙️) in the top-right corner.
+## Settings
 
 ### Color Palettes
 
-Access: Settings → Color Palette section
-
-**Available Palettes:**
+In **Settings → Color Palette**, choose from 5 options:
 
 | Palette | Description | Best For |
 |---------|-------------|----------|
-| **Vibrant Sunset** | Warm oranges, reds, yellows | Energy, excitement |
-| **Electric Night** | Purples, blues, cyan | Modern, tech events |
-| **Tropical Forest** | Greens, teals, lime | Nature, growth themes |
-| **Berry Punch** | Pinks, purples, coral | Fun, playful events |
+| **Vibrant Sunset** | Oranges, reds, yellows | Energy, excitement |
+| **Electric Night** | Purples, blues, cyan | Modern events |
+| **Tropical Forest** | Greens, teals, lime | Nature themes |
+| **Berry Punch** | Pinks, purples, coral | Fun, parties |
+| **Fiesta 🎉** | Neon: red, orange, yellow, cyan, green, purple | Maximum energy |
 
-**To Change Palette:**
-1. Open Settings
-2. Click any palette chip
-3. Wheel updates immediately
-
-### Managing Options
-
-**Add Option:**
-1. Type in "New option..." field
-2. Maximum 30 characters
-3. Press Enter or click Add
-
-**Edit Option:**
-1. Click directly on option text
-2. Type new text
-3. Changes save automatically
-
-**Delete Option:**
-1. Click trash icon next to option
-2. Option removed immediately
+Click any palette to instantly change wheel colors.
 
 ### Reset & Restart
 
 | Button | Function |
 |--------|----------|
-| **Reset** | Restore default 6 options |
-| **Restart** | Clear eliminations, keep options |
+| **Reset** | Restore default 6 challenges |
+| **Restart** | Clear turn mode, keep challenges |
 
 ---
 
-## Language Settings
+## Language
 
-### Switching Language
+### Changing Language
 
-1. Click the **Language icon** (🇬🇧 or 🇪🇸)
-2. Interface instantly switches language
+1. Click language icon 🌐 (top-right corner)
+2. Interface switches instantly
 3. Preference saved automatically
 
-### Available Languages
-
-| Language | Icon | Code |
-|----------|------|------|
-| **English** | 🇬🇧 | `en` |
-| **Spanish** | 🇪🇸 | `es` |
-
-### Translated Elements
-
-All UI elements are translated:
-- Button labels
-- Settings panel
-- Victory/Game Over screens
-- Tooltips
+**Available languages**: English / Español
 
 ---
 
 ## Advanced Features
 
-### Elimination Mode
+### Turn Mode 🔄
 
-**Purpose:** Remove options after each spin (ideal for games)
+Allows everyone to participate by eliminating each option after being chosen.
 
-**To Enable:**
-1. Click **Eliminate icon** (🗑️)
-2. Icon turns red when active
-3. Spin wheel
-4. Winner marked eliminated
+**To enable:**
+1. Click 🔄 icon (turns red when active)
+2. Spin the wheel
+3. Selected challenge appears — click "Continue" to mark as played
+4. Continue spinning until no options remain
 
-**To Disable:**
-1. Click red Eliminate icon again
+**When finished:** "All done! 🎉" screen appears with option to play again.
 
-**Game Flow:**
-1. Enable elimination mode
-2. Spin until one option remains
-3. Game Over screen appears
-4. Click "Play Again" to restart
+**To disable:** Click the red 🔄 icon again.
 
-### Fullscreen Mode
+> **Note:** In normal mode (without turn mode), "Continue" button also appears after each spin to show the result — it doesn't eliminate the option.
 
-**Purpose:** Maximize for presentations/projectors
+### Fullscreen ⛶
 
-**To Enable:**
-1. Click **Fullscreen icon** (⛶)
-2. App fills entire screen
-3. Icon changes to "Exit"
+**Enable:** Click ⛶ — app fills entire screen
+**Exit:** Click ⛶ again or press `Esc`
 
-**To Exit:**
-1. Click Fullscreen icon
-2. Or press `Esc` key
+### Sound 🔊
 
-### Sound Control
+- **Tick**: Plays while wheel spins (speeds up at start)
+- **Fanfare**: Plays when wheel stops
+- **Mute**: Icon turns red when muted
 
-**To Mute:**
-1. Click **Volume icon** (🔊)
-2. Icon shows 🔇 when muted
-3. Red background indicates muted state
+---
 
-**To Unmute:**
-1. Click muted Volume icon (🔇)
-2. Icon returns to 🔊
+## Result Screen
 
-**Sound Effects:**
-- **Tick**: Plays on segment transitions
-- **Victory**: Plays when wheel stops
+When wheel stops, you'll see:
+
+```
+┌──────────────────────────────────┐
+│                                  │
+│            🎊                    │  ← Animated
+│                                  │
+│      The challenge is!           │  ← Title
+│                                  │
+│      CHALLENGE NAME              │  ← Large text
+│                                  │
+│         [ Continue ]             │  ← Button
+│                                  │
+└──────────────────────────────────┘
+```
+
+With animated confetti across the screen 🎊
+
+---
+
+## Final Screen (Turn Mode)
+
+When everyone has had their turn:
+
+```
+┌──────────────────────────────────┐
+│                                  │
+│              🎉                  │  ← Animated
+│                                  │
+│        All done! 🎉              │
+│                                  │
+│   Everyone had their turn!       │
+│                                  │
+│       [ Play Again ]             │
+│                                  │
+└──────────────────────────────────┘
+```
 
 ---
 
 ## Tips for Presentations
 
-### Before Presenting
+### Before Starting
 
-1. ✅ **Test Audio**: Verify sound works in venue
-2. ✅ **Check Visibility**: Test on projector/screen
-3. ✅ **Prepare Options**: Add all options beforehand
-4. ✅ **Close Settings**: Start with clean interface
-5. ✅ **Enable Fullscreen**: For immersive experience
+1. ✅ **Test audio** in the venue beforehand
+2. ✅ **Check visibility** on projector/screen
+3. ✅ **Load challenges** before presentation
+4. ✅ **Close Settings** for clean interface
+5. ✅ **Enable Fullscreen** for maximum impact
 
 ### During Presentation
 
-1. **Use Short Names**: 6-10 characters maximum
-2. **Limit Options**: 4-8 options for large screens
-3. **Build Anticipation**: Let wheel spin fully
-4. **Celebrate Winners**: Allow time for victory animation
-5. **High Contrast**: Use Vibrant Sunset or Electric Night
+1. **Short text**: 1-3 words, max 18 characters for best readability
+2. **4-8 options** for large screens
+3. **Dramatic pause**: Let wheel spin fully before revealing
+4. **Recommended palettes for projector**: Fiesta 🎉 or Vibrant Sunset (maximum contrast)
 
-### Best Practices
+### Recommended Number of Options
 
-**For Large Screens:**
-- 4-8 options maximum
-- Short text (1-3 words)
-- High-contrast palettes
-
-**For Small Groups:**
-- Up to 15 options acceptable
-- Longer text OK
-- Any palette works
-
-**For Games:**
-- Enable Elimination Mode
-- Start with all participants
-- Continue until one winner
-
----
-
-## Troubleshooting
-
-### Sound Not Working
-
-**Symptoms:** No tick or victory sounds
-
-**Solutions:**
-1. Check mute button (red = muted)
-2. Click page to unlock audio
-3. Refresh application
-4. Check system volume
-
-### Wheel Not Spinning
-
-**Symptoms:** Clicking Spin does nothing
-
-**Solutions:**
-1. Ensure at least one option exists
-2. Check if game is over
-3. Click "Restart" in Settings
-4. Refresh application
-
-### Text Hard to Read
-
-**Symptoms:** Option names unclear
-
-**Solutions:**
-1. Use shorter text (<10 characters)
-2. Switch to high-contrast palette
-3. Increase browser zoom (Ctrl +)
-4. Use Fullscreen mode
-
-### Settings Panel Issues
-
-**Symptoms:** Can't see all options
-
-**Solutions:**
-1. Scroll within settings panel
-2. Resize browser window
-3. Use larger screen
-
-### Language Not Saving
-
-**Symptoms:** Language resets on refresh
-
-**Solutions:**
-1. Clear browser cache
-2. Check localStorage permissions
-3. Use modern browser
-
----
-
-## Victory Screen
-
-When wheel stops, you'll see:
-
-```
-┌─────────────────────────────────┐
-│                                 │
-│           🎉                    │  ← Celebration
-│                                 │
-│      WINNER TEXT                │  ← Large Display
-│                                 │
-│      [ Continue ]               │  ← Action Button
-│                                 │
-└─────────────────────────────────┘
-```
-
-**Elements:**
-- **Celebration Icon**: Animated trophy
-- **Winner Text**: Selected option (large)
-- **Continue Button**: Returns to wheel
-- **Confetti**: Animated celebration
-
----
-
-## Game Over Screen
-
-When all options eliminated:
-
-```
-┌─────────────────────────────────┐
-│                                 │
-│           🏆                    │  ← Trophy
-│                                 │
-│     Game Complete!              │
-│                                 │
-│  All options eliminated         │
-│                                 │
-│   [ Play Again ]                │
-│                                 │
-└─────────────────────────────────┘
-```
-
-**To Continue:**
-1. Click "Play Again"
-2. All options restored
-3. Ready for new game
+| Scenario | Options |
+|----------|---------|
+| Large screen / projector | 4–8 |
+| Small groups | up to 15 |
+| Turn Mode (everyone participates) | = number of people |
 
 ---
 
@@ -351,40 +224,44 @@ When all options eliminated:
 
 | Key | Action |
 |-----|--------|
-| `Enter` | Spin wheel / Add option |
+| `Enter` | Spin wheel / Add challenge |
 | `Esc` | Exit fullscreen / Close settings |
-| `F11` | Toggle fullscreen (browser) |
+| `F11` | System fullscreen |
 
 ---
 
 ## Accessibility
 
-### High Contrast Mode
-
-The application supports system high contrast settings:
-- Enabled automatically when system requests
-- Increased border visibility
-- Enhanced color differentiation
-
-### Reduced Motion
-
-For users sensitive to motion:
-- Respects system "Reduce Motion" setting
-- Animations minimized when enabled
-- Core functionality unchanged
-
-### Screen Reader Support
-
-- All buttons have aria-labels
-- Semantic HTML structure
-- Focus indicators visible
+- **High contrast**: Activates automatically when system requests
+- **Reduced motion**: Animations minimized when system requires
+- **Screen readers**: All buttons have aria labels
 
 ---
 
-## Support
+## Troubleshooting
 
-For additional help or bug reports, please refer to the project repository.
+### Sound not working
+1. Check sound icon is not red (= muted)
+2. Click anywhere in app to initialize audio
+3. Check system volume
 
-**Version:** 1.0.0  
-**Last Updated:** 2025  
-**Languages:** English, Spanish
+### Wheel not spinning
+1. Ensure at least one challenge exists
+2. If result screen is showing, click "Continue" first
+3. Click "Restart" in Settings
+
+### Text hard to read
+1. Use shorter text (under 18 characters)
+2. Switch to **Fiesta** or **Vibrant Sunset** palette
+3. Enable Fullscreen
+
+### Changes not saving
+App saves automatically to `localStorage`. If changes don't persist:
+1. Check browser/system allows local storage
+2. Don't use incognito mode
+
+---
+
+**Version:** 1.0.0
+**Last Updated:** 2026
+**Languages:** English / Español

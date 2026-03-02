@@ -1,15 +1,15 @@
 {
   "app": {
     "title": "Ruleta Giratoria",
-    "description": "Ruleta de Material Design 3 para toma de decisiones"
+    "description": "Ruleta divertida para prendas y desafíos grupales"
   },
   "controls": {
-    "spin": "Girar",
+    "spin": "¡Girar!",
     "mute": "Silenciar sonido",
     "unmute": "Activar sonido",
-    "eliminateMode": "Modo eliminación",
-    "disableEliminate": "Desactivar modo eliminación",
-    "enableEliminate": "Activar modo eliminación",
+    "turnMode": "Modo turno",
+    "disableTurnMode": "Desactivar modo turno",
+    "enableTurnMode": "Activar modo turno",
     "fullscreen": "Pantalla completa",
     "exitFullscreen": "Salir de pantalla completa",
     "settings": "Configuración",
@@ -19,28 +19,30 @@
     "title": "Configuración",
     "close": "Cerrar configuración",
     "colorPalette": "Paleta de Colores",
-    "newOption": "Nueva opción...",
-    "add": "Añadir",
+    "newOption": "Nuevo desafío...",
+    "add": "Agregar",
     "remove": "Eliminar",
     "reset": "Restaurar",
     "restart": "Reiniciar",
-    "noOptions": "No hay más opciones disponibles"
+    "noOptions": "¡No hay desafíos! Agregá algunos"
   },
   "palettes": {
-    "vibrantSunset": "Atardecer Vibrante",
-    "electricNight": "Noche Eléctrica",
-    "tropicalForest": "Bosque Tropical",
-    "berryPunch": "Ponche de Bayas"
+    "vibrantsunset": "Atardecer Vibrante",
+    "electricnight": "Noche Eléctrica",
+    "tropicalforest": "Bosque Tropical",
+    "berrypunch": "Ponche de Bayas",
+    "fiesta": "Fiesta 🎉"
   },
   "victory": {
-    "title": "¡Ganador!",
+    "title": "¡El desafío es!",
+    "subtitle": "El desafío:",
     "continue": "Continuar",
     "celebration": "Celebración"
   },
   "gameOver": {
-    "title": "¡Juego Completado!",
-    "message": "Todas las opciones han sido eliminadas",
-    "playAgain": "Jugar de Nuevo"
+    "title": "¡Todos los desafíos cumplidos! 🎉",
+    "message": "¡Se completaron todos los desafíos!",
+    "playAgain": "Jugar de nuevo"
   },
   "language": {
     "english": "English",

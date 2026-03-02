@@ -1,6 +1,10 @@
-# Spinning Wheel
+# Spinning Wheel 🎡
 
-A professional Material Design 3 spinning wheel application built with React 19, TypeScript, and Tauri v2. Perfect for decision making, games, presentations, and interactive activities.
+A fun roulette wheel for group challenges, forfeits, and party games. Built with React 19, TypeScript, and Tauri v2. Perfect for projecting on large screens during meetings, parties, or group activities.
+
+## Language
+
+[🇬🇧 English](README.md) | [🇪🇸 Español](README.es.md)
 
 ![Material Design 3](https://img.shields.io/badge/Material-Design%203-blue)
 ![React](https://img.shields.io/badge/React-19-61dafb)
@@ -10,14 +14,15 @@ A professional Material Design 3 spinning wheel application built with React 19,
 
 ## ✨ Features
 
-- 🎨 **4 Professional Color Palettes**: Vibrant Sunset, Electric Night, Tropical Forest, Berry Punch
-- 🔊 **Sound Effects**: Tick sounds during spin, victory fanfare on win (with mute toggle)
-- 🌍 **Bilingual Support**: English and Spanish with instant language switching
-- 🎯 **Elimination Mode**: Remove options after each spin
-- 🖥️ **Fullscreen Mode**: Perfect for presentations and projectors
-- 📱 **Responsive Design**: Works on all screen sizes
-- ⚡ **GPU Accelerated**: Smooth 60fps animations with Framer Motion
-- 🔒 **Offline First**: All assets (fonts, icons, sounds) bundled locally
+- 🎨 **5 Color Palettes**: Vibrant Sunset, Electric Night, Tropical Forest, Berry Punch, **Fiesta**
+- 🎊 **Clear result display**: Selected challenge shown large when wheel stops
+- 🔊 **Sound effects**: Tick sounds during spin, victory fanfare on stop (with mute toggle)
+- 🌍 **Bilingual**: English and Spanish with instant language switching
+- 🔄 **Turn Mode**: Eliminate options after each spin until everyone participates
+- 🖥️ **Fullscreen mode**: Perfect for projectors and large screens
+- 📱 **Responsive design**: Adapts to any window size
+- ⚡ **GPU Accelerated**: Smooth animations with Framer Motion
+- 🔒 **100% Offline**: Fonts, icons, and sounds bundled locally
 
 ## 🛠️ Tech Stack
 
@@ -36,12 +41,11 @@ A professional Material Design 3 spinning wheel application built with React 19,
 ### Prerequisites
 
 - **Node.js** 18+ and npm
-- **Rust** (for Tauri builds) - Install via [rustup.rs](https://rustup.rs)
+- **Rust** (for Tauri builds) — Install via [rustup.rs](https://rustup.rs)
 
 ### Development Setup
 
 ```bash
-# Clone the repository
 cd spinning-wheel
 
 # Install dependencies
@@ -53,70 +57,42 @@ npm run tauri dev
 
 ## 🔨 Building for Production
 
-### Build Commands
-
 ```bash
-# Build frontend only
+# Frontend only
 npm run build
 
-# Build for current platform (installers + portable)
+# Full build for current platform
 npm run tauri build
 ```
 
-### Build Output Locations
-
-After running `npm run tauri build`, artifacts are located in:
+Build artifacts are located in:
 
 ```
 src-tauri/target/release/bundle/
 ```
 
 #### Windows 🪟
-
-| Type | Location | Format | Description |
-|------|----------|--------|-------------|
-| **Installer** | `msi/*.msi` | Windows Installer | Standard MSI installer |
-| **Portable** | `binary/*.exe` | Standalone EXE | No installation required |
+| Type | Location | Format |
+|------|----------|--------|
+| Installer | `msi/*.msi` | Windows Installer |
+| Portable | `binary/*.exe` | Standalone EXE |
 
 #### macOS 🍎
-
-| Type | Location | Format | Description |
-|------|----------|--------|-------------|
-| **Installer** | `dmg/*.dmg` | Disk Image | DMG installer |
-| **Portable** | `macos/*.app` | App Bundle | Standalone application |
+| Type | Location | Format |
+|------|----------|--------|
+| Installer | `dmg/*.dmg` | Disk Image |
+| Portable | `macos/*.app` | App Bundle |
 
 #### Linux 🐧
+| Type | Location | Format |
+|------|----------|--------|
+| Debian | `deb/*.deb` | For Debian/Ubuntu |
+| AppImage | `appimage/*.AppImage` | Universal Linux |
+| RPM | `rpm/*.rpm` | For Fedora/RHEL |
 
-| Type | Location | Format | Description |
-|------|----------|--------|-------------|
-| **Debian** | `deb/*.deb` | Debian Package | For Debian/Ubuntu |
-| **AppImage** | `appimage/*.AppImage` | Portable AppImage | Universal Linux format |
-| **RPM** | `rpm/*.rpm` | RPM Package | For Fedora/RHEL |
-
-### Platform-Specific Build Notes
-
-#### Windows
+### System Dependencies (Linux/Debian)
 
 ```bash
-# Ensure Visual Studio Build Tools are installed
-# Install Rust: winget install Rustlang.Rustup
-npm run tauri build
-```
-
-#### macOS
-
-```bash
-# Install Xcode Command Line Tools
-xcode-select --install
-# Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-npm run tauri build
-```
-
-#### Linux (Debian/Ubuntu)
-
-```bash
-# Install required dependencies
 sudo apt update
 sudo apt install -y libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
 npm run tauri build
@@ -126,54 +102,41 @@ npm run tauri build
 
 ### Basic Operation
 
-1. **Spin the Wheel**: Click the "Spin" FAB (Floating Action Button)
-2. **Add Options**: Open Settings (⚙️) → Add new options
-3. **Change Palette**: Select from 4 color palettes in Settings
-4. **Toggle Sound**: Click volume icon (🔊/🔇) to mute/unmute
-5. **Switch Language**: Click language icon (🇬🇧/🇪🇸) to toggle English/Spanish
-6. **Fullscreen**: Click fullscreen icon (⛶) for presentation mode
+1. **Spin the wheel**: Click the "Spin!" button (or press `Enter`)
+2. **View result**: Selected challenge appears large when wheel stops
+3. **Continue**: Click "Continue" to return to the wheel
+4. **Add challenges**: Open Settings (⚙️) → type in field → Add
+5. **Change palette**: In Settings, select one of the 5 palettes
+6. **Mute**: Click volume icon (🔊/🔇)
+7. **Language**: Click language icon to toggle EN/ES
+8. **Fullscreen**: Click ⛶ for presentation mode
 
-### Elimination Mode
+### Turn Mode
 
-Enable elimination mode to remove options after each spin:
+Allows everyone to participate by eliminating options after each spin:
 
-1. Click the trash icon (🗑️) in the top bar
-2. Icon turns red when active
-3. Spin the wheel - winner is automatically eliminated
-4. Continue until all options are removed
-
-### Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| `Enter` | Spin wheel / Add option |
-| `Esc` | Exit fullscreen / Close settings |
+1. Enable turn mode 🔄 in the top bar (icon turns red)
+2. Spin — selected challenge is marked as "played"
+3. Click "Continue" to proceed with remaining options
+4. When everyone has participated, the final screen appears 🎉
 
 ## 🎨 Color Palettes
 
-| Palette | Seed Color | Colors | Best For |
-|---------|------------|--------|----------|
-| **Vibrant Sunset** | `#FF5722` | Orange, Amber, Red, Yellow | Energy, excitement |
-| **Electric Night** | `#6750A4` | Purple, Blue, Cyan, Magenta | Modern, tech events |
-| **Tropical Forest** | `#006A6A` | Green, Teal, Lime | Nature, growth |
-| **Berry Punch** | `#984061` | Raspberry, Pink, Violet, Coral | Fun, playful events |
+| Palette | Seed Color | Best For |
+|---------|------------|----------|
+| **Vibrant Sunset** | `#FF5722` | Energy, excitement |
+| **Electric Night** | `#6750A4` | Modern, tech events |
+| **Tropical Forest** | `#00BFA5` | Nature, growth |
+| **Berry Punch** | `#984061` | Fun, playful events |
+| **Fiesta** | `#FF1744` | Parties, maximum energy 🎉 |
 
 ## 🌐 Internationalization (i18n)
 
-The application supports **English** (default) and **Spanish**.
+The app supports **English** (default) and **Spanish**.
 
-### Changing Language
-
-1. Click the language icon in the top-right corner
-2. Icon shows current language (🇬🇧 = English, 🇪🇸 = Spanish)
-3. Language preference is saved in localStorage
-
-### Translation Files
-
-Translations are stored in `src/i18n/locales/`:
-
-- `en.json` - English translations
-- `es.json` - Spanish translations
+Translations are located in `src/i18n/locales/`:
+- `en.json` — English
+- `es.json` — Spanish
 
 ## 📁 Project Structure
 
@@ -185,12 +148,12 @@ spinning-wheel/
 │   ├── main.tsx                # React entry point
 │   ├── i18n.ts                 # i18next configuration
 │   ├── hooks/
-│   │   └── useAudio.ts         # Audio system hook
+│   │   └── useAudio.ts         # Audio hook (Web Audio API)
 │   ├── theme/
-│   │   └── m3-theme.ts         # M3 color system & tokens
+│   │   └── m3-theme.ts         # M3 color system & palettes
 │   └── assets/
-│       ├── fonts/              # Roboto font files (offline)
-│       └── icons/              # Material Symbols (offline)
+│       ├── fonts/              # Roboto fonts (offline)
+│       └── icons/              # Material Icons (offline)
 ├── src-tauri/
 │   ├── src/                    # Rust backend
 │   ├── capabilities/           # Tauri permissions
@@ -203,92 +166,39 @@ spinning-wheel/
 
 ## 🔒 Security
 
-### Content Security Policy (CSP)
-
-The application uses a strict CSP:
+Strict Content Security Policy (no external calls):
 
 ```html
-<meta http-equiv="Content-Security-Policy" 
-  content="default-src 'self'; img-src 'self' asset: https://asset.localhost data: blob:; media-src 'self' asset: https://asset.localhost blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' asset: https://asset.localhost;">
-```
-
-### Tauri Capabilities
-
-Window manipulation permissions in `src-tauri/capabilities/default.json`:
-
-```json
-{
-  "permissions": [
-    "core:default",
-    "core:window:allow-set-fullscreen"
-  ]
-}
+<meta http-equiv="Content-Security-Policy"
+  content="default-src 'self'; img-src 'self' asset: https://asset.localhost data: blob:; ...">
 ```
 
 ## ⚡ Performance
 
-- **GPU Acceleration**: All animations use `transform` and `opacity`
-- **Preloaded Audio**: Sounds synthesized on mount (zero latency)
-- **Canvas Rendering**: Hardware-accelerated 2D context
-- **Lazy Loading**: Settings drawer loads on demand
-- **will-change**: Optimized CSS hints for animations
+- **GPU Acceleration**: Animations use `transform` and `opacity`
+- **Canvas**: Hardware-accelerated 2D rendering
+- **Web Audio API**: Synthesized sounds (no external audio files)
+- **will-change**: CSS hints for optimized animations
 
-## 🖥️ Browser Support
+## ❓ Troubleshooting
 
-| Browser | Version | Support |
-|---------|---------|---------|
-| Chrome | 90+ | ✅ Full |
-| Firefox | 88+ | ✅ Full |
-| Safari | 14+ | ✅ Full |
-| Edge | 90+ | ✅ Full |
-
-## 🐛 Troubleshooting
-
-### Audio Not Playing
-
-1. Ensure browser allows audio autoplay
+### Sound not working
+1. Check that mute button is not active (red = muted)
 2. Click anywhere to unlock audio context
-3. Check if mute button is enabled (red icon)
+3. Check system volume
 
-### Build Fails
+### Wheel not spinning
+1. Ensure at least one option exists
+2. Check if result screen is showing from previous spin
+3. Click "Restart" in Settings
 
-**Windows**: Install Visual Studio Build Tools + Rust  
-**macOS**: Install Xcode Command Line Tools + Rust  
-**Linux**: Install WebKit2GTK, GTK3, libappindicator
-
-### Text Hard to Read
-
-1. Use shorter text (under 10 characters)
-2. Switch to high-contrast palette
-3. Use Fullscreen mode
-
-## 📄 Documentation
-
-- **[USER_GUIDE.md](./USER_GUIDE.md)** - Complete user manual
-- **[README.md](./README.md)** - This file (developer documentation)
-
-## 📝 License
-
-MIT License - See [LICENSE](./LICENSE) file for details.
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Create a Pull Request
-
-## 🙏 Acknowledgments
-
-- **Material Design 3** by Google
-- **Framer Motion** by Framer
-- **Tauri** by Tauri Programme
-- **Canvas Confetti** by Kiril Vatev
-- **i18next** by i18next contributors
+### Text hard to read on projector
+1. Use short text (1-3 words, max 20 characters)
+2. Select "Fiesta" or "Vibrant Sunset" palette (maximum contrast)
+3. Enable Fullscreen mode
 
 ---
 
-**Version:** 1.0.0  
-**Last Updated:** 2025  
-**Build:** Multi-platform (Windows, macOS, Linux)
+**Version:** 1.0.0
+**Last Updated:** 2026
+**Platforms:** Windows, macOS, Linux

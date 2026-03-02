@@ -86,11 +86,7 @@ export function useAudio() {
    * Toggle mute
    */
   const toggleMute = useCallback(() => {
-    setIsMuted((prev) => {
-      const newValue = !prev;
-      console.log("[Audio] Muted:", newValue);
-      return newValue;
-    });
+    setIsMuted((prev) => !prev);
   }, []);
 
   /**

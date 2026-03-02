@@ -104,15 +104,14 @@ body {
     transition: background 0.3s ease;
 }
 
-/* Top App Bar */
+/* Top App Bar — flows in the layout so main starts below it */
 .top-app-bar {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: clamp(12px, 2vw, 24px);
+    padding: clamp(8px, 1.5vw, 16px) clamp(12px, 2vw, 24px);
     z-index: 100;
     display: flex;
     justify-content: flex-end;
+    flex-shrink: 0;
+    background: transparent;
 }
 
 .top-app-bar__actions {
@@ -126,7 +125,6 @@ body {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-transform: none;
     letter-spacing: 0.00625em;
-    /* Dynamic theme colors via CSS variables */
     background: var(--md-sys-color-primary);
     color: var(--md-sys-color-on-primary);
     border: none;
@@ -153,7 +151,6 @@ body {
 /* M3 FAB - Uses CSS variables */
 .m3-fab {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Dynamic primary container color */
     background: var(--md-sys-color-primary-container);
     color: var(--md-sys-color-on-primary-container);
     border: none;
@@ -167,26 +164,35 @@ body {
     min-height: 0;
 }
 
-/* Wheel section */
+/* Wheel section — outer flex container */
 .wheel-section {
     flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    padding: clamp(20px, 4vw, 60px);
+    min-height: 0;
     overflow: hidden;
 }
 
-.wheel-container {
+/* Three-column layout: [button panel] [wheel] [spacer panel] */
+.wheel-layout {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: clamp(2rem, 5vw, 4rem);
-    max-width: 100%;
-    max-height: 100%;
-    position: relative;
+    justify-content: center;
+    flex: 1;
+    padding: clamp(16px, 2.5vw, 32px);
+    gap: clamp(16px, 2.5vw, 32px);
+    min-height: 0;
+    overflow: hidden;
 }
+
+/* Side panels — same width keeps wheel perfectly centered */
+.wheel-panel {
+    flex: 0 0 clamp(80px, 10vw, 150px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 /* Wheel wrapper with GPU acceleration */
 .wheel-wrapper {
@@ -196,12 +202,10 @@ body {
     will-change: transform;
 }
 
-/* Wheel canvas with dynamic glow using CSS variables */
+/* Wheel canvas */
 .wheel {
     border-radius: 50%;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.5),
-        0 0 60px var(--md-sys-color-primary) 40;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     transition:
         box-shadow 0.3s ease,
         filter 0.3s ease;
@@ -209,9 +213,7 @@ body {
 }
 
 .wheel:hover {
-    box-shadow:
-        0 12px 48px rgba(0, 0, 0, 0.6),
-        0 0 80px var(--md-sys-color-primary) 66;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
 }
 
 /* Empty message */
@@ -224,7 +226,75 @@ body {
     border: 1px solid var(--md-sys-color-outline-variant);
 }
 
-/* Settings Drawer - Fluid Layout fills full height */
+/* ─── Result Overlay ──────────────────────────────────────────────────────── */
+/* No backdrop-filter — it creates a stacking context that blocks 
+   the confetti canvas (z-index 9999) from appearing above */
+.result-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
+    background: rgba(0, 0, 0, 0.82);
+}
+
+/* ─── Result Banner ────────────────────────────────────────────────────────── */
+.result-banner {
+    text-align: center;
+    padding: clamp(24px, 4vw, 48px) clamp(32px, 6vw, 72px);
+    background: var(--md-sys-color-surface);
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    border: 3px solid;
+    /* color set inline via resultColor */
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.7),
+        0 0 80px rgba(0, 0, 0, 0.4);
+    max-width: min(88vw, 540px);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.result-emoji {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    animation: bounce 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-10px);
+    }
+}
+
+.result-title {
+    font-family: "Roboto", sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface-variant);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.result-text {
+    font-family: "Roboto", sans-serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    word-break: break-word;
+    max-width: 100%;
+    /* color set inline via resultColor */
+}
+
+/* ─── Settings Drawer ──────────────────────────────────────────────────────── */
 .settings-drawer {
     width: clamp(340px, 32vw, 400px);
     min-width: clamp(340px, 32vw, 400px);
@@ -233,15 +303,11 @@ body {
     display: flex;
     flex-direction: column;
     box-shadow: var(--md-sys-elevation-3);
-    /* Fill full viewport height */
-    height: 100vh;
-    max-height: 100vh;
+    height: 100%;
+    max-height: 100%;
     overflow: hidden;
-    /* Appear BELOW top app bar - lower z-index */
     z-index: 10;
     position: relative;
-    /* Push content down to not overlap with top bar */
-    margin-top: 64px;
 }
 
 .drawer-header {
@@ -271,7 +337,7 @@ body {
     background: var(--md-sys-color-surface-variant);
 }
 
-/* Drawer Content - Fluid with smart scroll */
+/* Drawer Content */
 .drawer-content {
     flex: 1;
     overflow-y: auto;
@@ -280,7 +346,6 @@ body {
     flex-direction: column;
     gap: 16px;
     min-height: 0;
-    /* Expand to fill available space minus header and actions */
     height: auto;
     max-height: calc(100vh - 200px);
 }
@@ -313,7 +378,7 @@ body {
 }
 
 .palette-chip.selected {
-    box-shadow: 0 0 0 2px var(--md-sys-color-primary) 40;
+    box-shadow: 0 0 0 2px var(--md-sys-color-primary);
 }
 
 .chip-colors {
@@ -322,8 +387,8 @@ body {
 }
 
 .chip-swatch {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
@@ -351,8 +416,7 @@ body {
 .text-field:focus {
     outline: none;
     border-color: var(--md-sys-color-primary);
-    box-shadow: 0 0 0 2px
-        color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
 }
 
 .text-field::placeholder {
@@ -405,7 +469,7 @@ body {
 .option-text:focus {
     outline: none;
     background: var(--md-sys-color-surface);
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--md-sys-shape-corner-medium);
 }
 
 .remove-button {
@@ -437,110 +501,7 @@ body {
     background: var(--md-sys-color-surface);
 }
 
-/* Victory Overlay - Full screen with blur scrim */
-.victory-overlay {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    /* Blur scrim effect */
-    background: radial-gradient(
-        ellipse at center,
-        var(--md-sys-color-primary-container) 50 0%,
-        var(--md-sys-color-background) 60%,
-        var(--md-sys-color-background) EE 100%
-    );
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    overflow: hidden;
-    will-change: opacity;
-}
-
-/* Victory Card - M3 Elevated Card with ExtraLarge corners */
-.victory-card {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: clamp(48px, 10vw, 96px) clamp(40px, 8vw, 80px);
-    border-radius: var(--md-sys-shape-corner-extra-large);
-    max-width: 90vw;
-    will-change: transform, opacity;
-    border: none;
-    /* PrimaryContainer background from CSS variable */
-    background: var(--md-sys-color-primary-container);
-    /* High elevation for floating effect */
-    box-shadow: var(--md-sys-elevation-5);
-}
-
-/* Winner Text - DisplayLarge with high contrast */
-.winner-text {
-    /* Solid color from CSS variable - NO gradients */
-    color: var(--md-sys-color-on-primary-container) !important;
-    -webkit-text-fill-color: var(
-        --md-sys-color-on-primary-container
-    ) !important;
-    text-fill-color: var(--md-sys-color-on-primary-container) !important;
-    /* Remove any background/gradient */
-    background: none !important;
-    -webkit-background-clip: initial !important;
-    background-clip: initial !important;
-    /* Full opacity */
-    opacity: 1 !important;
-    /* High z-index */
-    z-index: 10;
-    position: relative;
-    /* Text shadow for projector */
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    padding: 0 clamp(1rem, 2vw, 2rem);
-    max-width: 95vw;
-    line-height: 1.1;
-    /* DisplayLarge typography */
-    font-size: clamp(3rem, 10vw, 6rem);
-    font-weight: 900;
-    font-family: "Roboto", sans-serif;
-    letter-spacing: -0.015625em;
-}
-
-/* Continue Button - Extended FAB style */
-.continue-button {
-    animation: pulse 2s ease-in-out infinite;
-    /* Use tertiary color from CSS variables */
-    background: var(--md-sys-color-tertiary);
-    color: var(--md-sys-color-on-tertiary);
-}
-
-@keyframes pulse {
-    0%,
-    100% {
-        box-shadow: 0 8px 32px var(--md-sys-color-tertiary) 40;
-    }
-    50% {
-        box-shadow: 0 12px 48px var(--md-sys-color-tertiary) 60;
-    }
-}
-
-/* Celebration Icon Animation */
-.celebration-icon {
-    animation: celebrate 1.5s ease-in-out infinite;
-}
-
-@keyframes celebrate {
-    0%,
-    100% {
-        transform: scale(1) rotate(0deg);
-    }
-    25% {
-        transform: scale(1.1) rotate(-10deg);
-    }
-    75% {
-        transform: scale(1.1) rotate(10deg);
-    }
-}
-
-/* Game Over Overlay */
+/* ─── Round Complete Modal ─────────────────────────────────────────────────── */
 .game-over-overlay {
     position: fixed;
     inset: 0;
@@ -548,7 +509,7 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
@@ -589,7 +550,7 @@ body {
     background: var(--md-sys-color-on-surface-variant);
 }
 
-/* Responsive design */
+/* ─── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
     .main {
         flex-direction: column;
@@ -617,16 +578,9 @@ body {
         gap: 2rem;
     }
 
-    .victory-card {
-        padding: 40px 24px;
-    }
-
-    .winner-text {
-        padding: 0 1rem;
-    }
-
-    .continue-button {
-        width: 100%;
+    .result-banner {
+        padding: 24px 20px;
+        max-width: 95vw;
     }
 
     .game-over-card {
@@ -644,23 +598,20 @@ body {
     }
 }
 
-/* Projection mode optimizations */
+/* ─── Projection mode ──────────────────────────────────────────────────────── */
 @media (min-width: 1920px) {
     .wheel-container {
         gap: clamp(3rem, 6vw, 6rem);
     }
 
-    .victory-card {
-        padding: clamp(60px, 10vw, 100px) clamp(50px, 10vw, 100px);
-    }
-
-    .winner-text {
-        font-size: clamp(4rem, 12vw, 8rem);
+    .result-text {
+        font-size: clamp(4rem, 8vw, 6rem);
     }
 }
 
-/* Reduced motion support */
+/* ─── Reduced motion ───────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -670,7 +621,7 @@ body {
     }
 }
 
-/* High contrast mode support */
+/* ─── High contrast ────────────────────────────────────────────────────────── */
 @media (prefers-contrast: high) {
     :root {
         --md-sys-color-outline: #ffffff;
@@ -679,7 +630,7 @@ body {
 
     .m3-button,
     .settings-drawer,
-    .victory-card,
+    .result-banner,
     .game-over-card {
         border: 2px solid var(--md-sys-color-outline);
     }

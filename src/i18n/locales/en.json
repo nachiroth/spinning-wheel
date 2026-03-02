@@ -1,15 +1,15 @@
 {
   "app": {
     "title": "Spinning Wheel",
-    "description": "Material Design 3 spinning wheel for decision making"
+    "description": "Fun roulette wheel for group challenges and forfeits"
   },
   "controls": {
-    "spin": "Spin",
+    "spin": "Spin!",
     "mute": "Mute sound",
     "unmute": "Unmute sound",
-    "eliminateMode": "Elimination mode",
-    "disableEliminate": "Disable elimination mode",
-    "enableEliminate": "Enable elimination mode",
+    "turnMode": "Turn mode",
+    "disableTurnMode": "Disable turn mode",
+    "enableTurnMode": "Enable turn mode",
     "fullscreen": "Enter fullscreen",
     "exitFullscreen": "Exit fullscreen",
     "settings": "Settings",
@@ -19,27 +19,29 @@
     "title": "Settings",
     "close": "Close settings",
     "colorPalette": "Color Palette",
-    "newOption": "New option...",
+    "newOption": "New challenge...",
     "add": "Add",
     "remove": "Remove",
     "reset": "Reset",
     "restart": "Restart",
-    "noOptions": "No more options available"
+    "noOptions": "No challenges left — add some!"
   },
   "palettes": {
-    "vibrantSunset": "Vibrant Sunset",
-    "electricNight": "Electric Night",
-    "tropicalForest": "Tropical Forest",
-    "berryPunch": "Berry Punch"
+    "vibrantsunset": "Vibrant Sunset",
+    "electricnight": "Electric Night",
+    "tropicalforest": "Tropical Forest",
+    "berrypunch": "Berry Punch",
+    "fiesta": "Fiesta 🎉"
   },
   "victory": {
-    "title": "Winner!",
+    "title": "The challenge is!",
+    "subtitle": "Your challenge:",
     "continue": "Continue",
     "celebration": "Celebration"
   },
   "gameOver": {
-    "title": "Game Complete!",
-    "message": "All options have been eliminated",
+    "title": "All done! 🎉",
+    "message": "All challenges completed!",
     "playAgain": "Play Again"
   },
   "language": {
