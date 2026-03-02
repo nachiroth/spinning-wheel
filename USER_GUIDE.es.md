@@ -22,7 +22,7 @@
 ### Al abrir la app por primera vez verás:
 
 - **La Ruleta**: Al centro, con 6 desafíos de ejemplo
-- **Botón Girar**: Flotante debajo de la ruleta
+- **Botón Girar**: A la izquierda de la ruleta
 - **Controles superiores**: Cinco íconos en la esquina superior derecha
 
 ### Vista general de la interfaz
@@ -33,11 +33,9 @@
 │                                          │
 │              ┌─────────────┐             │
 │              │             │   ▲         │  ← Puntero
-│              │   RULETA    │             │
+│ [ ¡Girar! ]  │   RULETA    │             │
 │              │             │             │
 │              └─────────────┘             │
-│                                          │
-│            [ ¡Girar! ]                   │  ← Botón FAB
 │                                          │
 └──────────────────────────────────────────┘
 ```

@@ -22,7 +22,7 @@
 ### When you first open the app:
 
 - **The Wheel**: Center screen with 6 sample challenges
-- **Spin Button**: Floating below the wheel
+- **Spin Button**: Left side of the wheel
 - **Top Controls**: Five icons in the top-right corner
 
 ### Interface Overview
@@ -33,11 +33,9 @@
 │                                          │
 │              ┌─────────────┐             │
 │              │             │   ▲         │  ← Pointer
-│              │    WHEEL    │             │
+│   [ Spin! ]  │    WHEEL    │             │
 │              │             │             │
 │              └─────────────┘             │
-│                                          │
-│            [ Spin! ]                     │  ← FAB Button
 │                                          │
 └──────────────────────────────────────────┘
 ```
