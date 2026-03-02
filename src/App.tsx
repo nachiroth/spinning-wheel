@@ -73,9 +73,13 @@ function App() {
   const [turnMode, setTurnMode] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(null);
+  const [activeSegmentIndex, setActiveSegmentIndex] = useState<number | null>(
+    null,
+  );
   const [showContinue, setShowContinue] = useState(false);
-  const [pendingEliminationId, setPendingEliminationId] = useState<string | null>(null);
+  const [pendingEliminationId, setPendingEliminationId] = useState<
+    string | null
+  >(null);
   const [resultText, setResultText] = useState<string>("");
   const [resultColor, setResultColor] = useState<string>("");
 
@@ -116,15 +120,27 @@ function App() {
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty("--md-sys-color-primary", currentPalette.colors[0]);
-    root.style.setProperty("--md-sys-color-primary-container", currentPalette.colors[3]);
+    root.style.setProperty(
+      "--md-sys-color-primary-container",
+      currentPalette.colors[3],
+    );
     root.style.setProperty("--md-sys-color-on-primary", "#FFFFFF");
     root.style.setProperty("--md-sys-color-on-primary-container", "#000000");
     root.style.setProperty("--md-sys-color-tertiary", currentPalette.colors[4]);
-    root.style.setProperty("--md-sys-color-tertiary-container", currentPalette.colors[5]);
+    root.style.setProperty(
+      "--md-sys-color-tertiary-container",
+      currentPalette.colors[5],
+    );
     root.style.setProperty("--md-sys-color-on-tertiary", "#FFFFFF");
     root.style.setProperty("--md-sys-color-on-tertiary-container", "#000000");
-    root.style.setProperty("--md-sys-color-secondary", currentPalette.colors[1]);
-    root.style.setProperty("--md-sys-color-secondary-container", currentPalette.colors[2]);
+    root.style.setProperty(
+      "--md-sys-color-secondary",
+      currentPalette.colors[1],
+    );
+    root.style.setProperty(
+      "--md-sys-color-secondary-container",
+      currentPalette.colors[2],
+    );
     root.style.setProperty("--md-sys-color-surface", currentPalette.surface);
   }, [currentPalette]);
 
@@ -135,7 +151,10 @@ function App() {
   // ── Persist settings ────────────────────────────────────────────────────
   useEffect(() => {
     try {
-      localStorage.setItem("wheelSettings", JSON.stringify({ options, paletteIndex }));
+      localStorage.setItem(
+        "wheelSettings",
+        JSON.stringify({ options, paletteIndex }),
+      );
     } catch (e) {
       console.error("Failed to save settings:", e);
     }
@@ -148,7 +167,7 @@ function App() {
         const cw = containerRef.current.clientWidth;
         const ch = containerRef.current.clientHeight;
         // Reserve space for the two side panels (button + spacer) and gaps
-        const panelW = Math.max(80, Math.min(150, cw * 0.10));
+        const panelW = Math.max(80, Math.min(150, cw * 0.1));
         const gap = Math.max(20, Math.min(40, cw * 0.025));
         const paddingH = 32;
         const paddingV = 32;
@@ -232,24 +251,28 @@ function App() {
 
       // Truncate long text
       let displayText = option.text;
-      if (displayText.length > 16) displayText = displayText.substring(0, 13) + "…";
+      if (displayText.length > 16)
+        displayText = displayText.substring(0, 13) + "…";
 
       // Dynamic font size: start large, shrink until text fits
-      const availableWidth = radius * 0.50; // usable width per segment
-      let fontSize = Math.max(11, Math.min(30, radius / 5.5));
-      ctx.font = `800 ${fontSize}px 'Roboto', sans-serif`;
-      while (ctx.measureText(displayText).width > availableWidth && fontSize > 9) {
+      const availableWidth = radius * 0.6; // usable width per segment
+      let fontSize = Math.max(14, Math.min(42, radius / 4));
+      ctx.font = `900 ${fontSize}px 'Roboto', sans-serif`;
+      while (
+        ctx.measureText(displayText).width > availableWidth &&
+        fontSize > 12
+      ) {
         fontSize -= 1;
-        ctx.font = `800 ${fontSize}px 'Roboto', sans-serif`;
+        ctx.font = `900 ${fontSize}px 'Roboto', sans-serif`;
       }
 
       // Always white text with dark shadow → readable on any color
       ctx.shadowColor = "rgba(0,0,0,0.85)";
-      ctx.shadowBlur = 5;
-      ctx.shadowOffsetX = 1;
-      ctx.shadowOffsetY = 1;
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
       ctx.fillStyle = "#FFFFFF";
-      ctx.fillText(displayText, radius * 0.58, 0);
+      ctx.fillText(displayText, radius * 0.6, 0);
 
       ctx.restore();
     });
@@ -298,7 +321,7 @@ function App() {
     const normalizedRotation = ((rotation % 360) + 360) % 360;
     const currentSegmentIndex = Math.floor(
       ((2 * Math.PI - (normalizedRotation * Math.PI) / 180) % (2 * Math.PI)) /
-      segmentAngle,
+        segmentAngle,
     );
     setActiveSegmentIndex(currentSegmentIndex);
     if (
@@ -337,7 +360,9 @@ function App() {
           const easeOut = 1 - Math.pow(1 - progress, 3);
           spinVelocityRef.current = initialVelocity * (1 - progress);
           const totalRotation =
-            startRotation + anticipationRotation + initialVelocity * easeOut * 100;
+            startRotation +
+            anticipationRotation +
+            initialVelocity * easeOut * 100;
           setRotation(totalRotation);
 
           if (progress < 1) {
@@ -345,14 +370,17 @@ function App() {
           } else {
             const normalizedRotation = ((totalRotation % 360) + 360) % 360;
             const winningAngle =
-              (((2 * Math.PI - (normalizedRotation * Math.PI) / 180) % (2 * Math.PI)) +
+              (((2 * Math.PI - (normalizedRotation * Math.PI) / 180) %
+                (2 * Math.PI)) +
                 2 * Math.PI) %
               (2 * Math.PI);
             const winningIndex =
               Math.floor(winningAngle / segmentAngle) % activeOptions.length;
             const winningOption = activeOptions[winningIndex];
             const winningColor =
-              currentPalette.colors[winningIndex % currentPalette.colors.length];
+              currentPalette.colors[
+                winningIndex % currentPalette.colors.length
+              ];
 
             setIsSpinning(false);
             spinVelocityRef.current = 0;
@@ -401,9 +429,22 @@ function App() {
 
     const frame = () => {
       if (!confettiActiveRef.current || !myConfetti.current) return;
-      mc({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: currentPalette.colors });
-      mc({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: currentPalette.colors });
-      if (Date.now() < end && confettiActiveRef.current) requestAnimationFrame(frame);
+      mc({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: currentPalette.colors,
+      });
+      mc({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: currentPalette.colors,
+      });
+      if (Date.now() < end && confettiActiveRef.current)
+        requestAnimationFrame(frame);
     };
     frame();
 
@@ -433,7 +474,11 @@ function App() {
     if (!newOptionText.trim()) return;
     setOptions((prev) => [
       ...prev,
-      { id: Date.now().toString(), text: newOptionText.trim(), eliminated: false },
+      {
+        id: Date.now().toString(),
+        text: newOptionText.trim(),
+        eliminated: false,
+      },
     ]);
     setNewOptionText("");
   };
@@ -442,7 +487,9 @@ function App() {
     setOptions((prev) => prev.filter((opt) => opt.id !== id));
 
   const updateOptionText = (id: string, text: string) =>
-    setOptions((prev) => prev.map((opt) => (opt.id === id ? { ...opt, text } : opt)));
+    setOptions((prev) =>
+      prev.map((opt) => (opt.id === id ? { ...opt, text } : opt)),
+    );
 
   const resetGame = () => {
     stopConfetti();
@@ -457,7 +504,10 @@ function App() {
   const resetToDefaults = () => {
     stopConfetti();
     setOptions(
-      DEFAULT_OPTIONS.map((opt, i) => ({ ...opt, id: Date.now().toString() + i })),
+      DEFAULT_OPTIONS.map((opt, i) => ({
+        ...opt,
+        id: Date.now().toString() + i,
+      })),
     );
     setShowRoundComplete(false);
     setRotation(0);
@@ -529,7 +579,16 @@ function App() {
             title={`${t("language.switch")} (${i18n.language === "en" ? "English" : "Español"})`}
             size="large"
           >
-            <span style={{ fontSize: "0.65rem", fontWeight: 700, position: "absolute", bottom: "4px", right: "7px", color: "inherit" }}>
+            <span
+              style={{
+                fontSize: "0.65rem",
+                fontWeight: 700,
+                position: "absolute",
+                bottom: "4px",
+                right: "7px",
+                color: "inherit",
+              }}
+            >
               {i18n.language === "en" ? "EN" : "ES"}
             </span>
           </M3IconButton>
@@ -544,13 +603,21 @@ function App() {
             icon={turnMode ? "eliminate-active" : "eliminate"}
             active={turnMode}
             onClick={() => setTurnMode(!turnMode)}
-            title={turnMode ? t("controls.disableTurnMode") : t("controls.enableTurnMode")}
+            title={
+              turnMode
+                ? t("controls.disableTurnMode")
+                : t("controls.enableTurnMode")
+            }
           />
           <M3IconButton
             icon={isFullscreen ? "fullscreen-exit" : "fullscreen"}
             active={isFullscreen}
             onClick={toggleFullscreen}
-            title={isFullscreen ? t("controls.exitFullscreen") : t("controls.fullscreen")}
+            title={
+              isFullscreen
+                ? t("controls.exitFullscreen")
+                : t("controls.fullscreen")
+            }
           />
           <M3IconButton
             icon="settings"
@@ -570,19 +637,26 @@ function App() {
             {/* Left panel: spin / empty message */}
             <div className="wheel-panel">
               <AnimatePresence mode="wait">
-                {!isSpinning && !showRoundComplete && !showContinue && activeOptions.length > 0 && (
-                  <motion.div
-                    key="spin"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  >
-                    <MFab onClick={spin} icon="play" size="large">
-                      {t("controls.spin")}
-                    </MFab>
-                  </motion.div>
-                )}
+                {!isSpinning &&
+                  !showRoundComplete &&
+                  !showContinue &&
+                  activeOptions.length > 0 && (
+                    <motion.div
+                      key="spin"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 15,
+                      }}
+                    >
+                      <MFab onClick={spin} icon="play" size="large">
+                        {t("controls.spin")}
+                      </MFab>
+                    </motion.div>
+                  )}
                 {activeOptions.length === 0 && !showRoundComplete && (
                   <motion.div
                     key="empty"
@@ -636,7 +710,12 @@ function App() {
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <div className="drawer-header">
-                <h2 style={{ ...typography.titleLarge, color: defaultTheme.onSurface }}>
+                <h2
+                  style={{
+                    ...typography.titleLarge,
+                    color: defaultTheme.onSurface,
+                  }}
+                >
                   {t("settings.title")}
                 </h2>
                 <button
@@ -653,7 +732,13 @@ function App() {
               <div className="drawer-content">
                 {/* Palette chips */}
                 <div className="palette-section">
-                  <h3 style={{ ...typography.titleSmall, color: defaultTheme.onSurfaceVariant, marginBottom: "12px" }}>
+                  <h3
+                    style={{
+                      ...typography.titleSmall,
+                      color: defaultTheme.onSurfaceVariant,
+                      marginBottom: "12px",
+                    }}
+                  >
                     {t("settings.colorPalette")}
                   </h3>
                   <div className="palette-chips">
@@ -665,16 +750,30 @@ function App() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         style={{
-                          borderColor: paletteIndex === index ? palette.seedColor : "transparent",
+                          borderColor:
+                            paletteIndex === index
+                              ? palette.seedColor
+                              : "transparent",
                         }}
                       >
                         <div className="chip-colors">
                           {palette.colors.slice(0, 4).map((color, i) => (
-                            <div key={i} className="chip-swatch" style={{ backgroundColor: color }} />
+                            <div
+                              key={i}
+                              className="chip-swatch"
+                              style={{ backgroundColor: color }}
+                            />
                           ))}
                         </div>
-                        <span style={{ ...typography.labelSmall, color: defaultTheme.onSurface }}>
-                          {t(`palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const)}
+                        <span
+                          style={{
+                            ...typography.labelSmall,
+                            color: defaultTheme.onSurface,
+                          }}
+                        >
+                          {t(
+                            `palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const,
+                          )}
                         </span>
                       </motion.button>
                     ))}
@@ -692,7 +791,12 @@ function App() {
                     maxLength={30}
                     className="text-field"
                   />
-                  <M3Button variant="filled" onClick={addOption} disabled={!newOptionText.trim()} icon="add">
+                  <M3Button
+                    variant="filled"
+                    onClick={addOption}
+                    disabled={!newOptionText.trim()}
+                    icon="add"
+                  >
                     {t("settings.add")}
                   </M3Button>
                 </div>
@@ -711,7 +815,9 @@ function App() {
                         <input
                           type="text"
                           value={option.text}
-                          onChange={(e) => updateOptionText(option.id, e.target.value)}
+                          onChange={(e) =>
+                            updateOptionText(option.id, e.target.value)
+                          }
                           className="option-text"
                           maxLength={30}
                         />
@@ -731,7 +837,11 @@ function App() {
               </div>
 
               <div className="drawer-actions">
-                <M3Button variant="tonal" onClick={resetToDefaults} icon="refresh">
+                <M3Button
+                  variant="tonal"
+                  onClick={resetToDefaults}
+                  icon="refresh"
+                >
                   {t("settings.reset")}
                 </M3Button>
                 <M3Button variant="filled" onClick={resetGame}>
@@ -803,18 +913,43 @@ function App() {
             >
               <motion.div
                 className="trophy-icon"
-                animate={{ rotate: [0, -15, 15, -15, 15, 0], scale: [1, 1.2, 1] }}
-                transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 1.5 }}
+                animate={{
+                  rotate: [0, -15, 15, -15, 15, 0],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  repeatDelay: 1.5,
+                }}
               >
                 🎉
               </motion.div>
-              <h2 style={{ ...typography.headlineMedium, color: defaultTheme.onSurface, marginBottom: "12px" }}>
+              <h2
+                style={{
+                  ...typography.headlineMedium,
+                  color: defaultTheme.onSurface,
+                  marginBottom: "12px",
+                }}
+              >
                 {t("gameOver.title")}
               </h2>
-              <p style={{ ...typography.bodyLarge, color: defaultTheme.onSurfaceVariant, marginBottom: "32px" }}>
+              <p
+                style={{
+                  ...typography.bodyLarge,
+                  color: defaultTheme.onSurfaceVariant,
+                  marginBottom: "32px",
+                }}
+              >
                 {t("gameOver.message")}
               </p>
-              <M3Button variant="filled" size="large" onClick={resetGame} icon="refresh" style={{ width: "100%" }}>
+              <M3Button
+                variant="filled"
+                size="large"
+                onClick={resetGame}
+                icon="refresh"
+                style={{ width: "100%" }}
+              >
                 {t("gameOver.playAgain")}
               </M3Button>
             </motion.div>
@@ -837,7 +972,16 @@ interface M3ButtonProps {
   style?: React.CSSProperties;
 }
 
-function M3Button({ variant = "filled", size = "medium", icon, disabled = false, onClick, children, className = "", style = {} }: M3ButtonProps) {
+function M3Button({
+  variant = "filled",
+  size = "medium",
+  icon,
+  disabled = false,
+  onClick,
+  children,
+  className = "",
+  style = {},
+}: M3ButtonProps) {
   return (
     <motion.button
       className={`m3-button ${className}`}
@@ -845,12 +989,16 @@ function M3Button({ variant = "filled", size = "medium", icon, disabled = false,
       disabled={disabled}
       style={{
         background:
-          variant === "filled" ? "var(--md-sys-color-primary)"
-            : variant === "tonal" ? "var(--md-sys-color-primary-container)"
+          variant === "filled"
+            ? "var(--md-sys-color-primary)"
+            : variant === "tonal"
+              ? "var(--md-sys-color-primary-container)"
               : "transparent",
         color:
-          variant === "filled" ? "var(--md-sys-color-on-primary)"
-            : variant === "tonal" ? "var(--md-sys-color-on-primary-container)"
+          variant === "filled"
+            ? "var(--md-sys-color-on-primary)"
+            : variant === "tonal"
+              ? "var(--md-sys-color-on-primary-container)"
               : "var(--md-sys-color-primary)",
         border: "none",
         borderRadius: shape.cornerFull,
@@ -869,7 +1017,11 @@ function M3Button({ variant = "filled", size = "medium", icon, disabled = false,
       whileHover={disabled ? {} : { scale: 1.02 }}
       whileTap={disabled ? {} : { scale: 0.98 }}
     >
-      {icon && <svg width="18" height="18" fill="currentColor"><use href={`#icon-${icon}`} /></svg>}
+      {icon && (
+        <svg width="18" height="18" fill="currentColor">
+          <use href={`#icon-${icon}`} />
+        </svg>
+      )}
       {children}
     </motion.button>
   );
@@ -885,7 +1037,14 @@ interface M3IconButtonProps {
   children?: React.ReactNode;
 }
 
-function M3IconButton({ icon, active = false, onClick, title, size = "medium", children }: M3IconButtonProps) {
+function M3IconButton({
+  icon,
+  active = false,
+  onClick,
+  title,
+  size = "medium",
+  children,
+}: M3IconButtonProps) {
   const buttonSize = size === "large" ? 52 : 44;
   return (
     <motion.button
@@ -906,10 +1065,15 @@ function M3IconButton({ icon, active = false, onClick, title, size = "medium", c
         color: active ? defaultTheme.onError : defaultTheme.onSurfaceVariant,
         position: "relative",
       }}
-      whileHover={{ scale: 1.1, background: active ? defaultTheme.error : defaultTheme.surfaceVariant }}
+      whileHover={{
+        scale: 1.1,
+        background: active ? defaultTheme.error : defaultTheme.surfaceVariant,
+      }}
       whileTap={{ scale: 0.95 }}
     >
-      <svg width="24" height="24" fill="currentColor"><use href={`#icon-${icon}`} /></svg>
+      <svg width="24" height="24" fill="currentColor">
+        <use href={`#icon-${icon}`} />
+      </svg>
       {children}
     </motion.button>
   );
@@ -923,7 +1087,12 @@ interface MFabProps {
   children?: React.ReactNode;
 }
 
-function MFab({ icon = "play", size = "medium", onClick, children }: MFabProps) {
+function MFab({
+  icon = "play",
+  size = "medium",
+  onClick,
+  children,
+}: MFabProps) {
   return (
     <motion.button
       className="m3-fab"
@@ -949,7 +1118,11 @@ function MFab({ icon = "play", size = "medium", onClick, children }: MFabProps) 
       whileTap={{ scale: 0.95 }}
     >
       {icon && (
-        <svg width={size === "large" ? 24 : 20} height={size === "large" ? 24 : 20} fill="currentColor">
+        <svg
+          width={size === "large" ? 24 : 20}
+          height={size === "large" ? 24 : 20}
+          fill="currentColor"
+        >
           <use href={`#icon-${icon}`} />
         </svg>
       )}
