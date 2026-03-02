@@ -9,7 +9,26 @@ permissions:
   contents: write
 
 jobs:
+  # Create draft release first
+  create-release:
+    runs-on: ubuntu-22.04
+    outputs:
+      release_id: ${{ steps.create.outputs.release_id }}
+    steps:
+      - name: Create Draft Release
+        id: create
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: "Spinning Wheel ${{ github.ref_name }}"
+          draft: true
+          prerelease: false
+
+  # Build for each platform
   build:
+    needs: create-release
     strategy:
       fail-fast: false
       matrix:
@@ -59,7 +78,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: "Spinning Wheel ${{ github.ref_name }}"
-          releaseDraft: true
-          prerelease: false
+          releaseId: ${{ needs.create-release.outputs.release_id }}
