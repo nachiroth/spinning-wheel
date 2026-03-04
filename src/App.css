@@ -111,13 +111,28 @@ body {
     display: flex;
     justify-content: flex-end;
     flex-shrink: 0;
-    background: transparent;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.28),
+        rgba(0, 0, 0, 0)
+    );
 }
 
 .top-app-bar__actions {
     display: flex;
     gap: clamp(8px, 1vw, 16px);
     align-items: center;
+    padding: 6px;
+    border-radius: 999px;
+    background: color-mix(
+        in srgb,
+        var(--md-sys-color-surface) 76%,
+        transparent
+    );
+    border: 1px solid
+        color-mix(in srgb, var(--md-sys-color-outline) 30%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 /* M3 Button - Uses CSS variables for theme sync */
@@ -193,6 +208,55 @@ body {
     justify-content: center;
 }
 
+.wheel-panel--info {
+    align-items: flex-start;
+}
+
+.status-card {
+    width: clamp(92px, 10vw, 150px);
+    padding: 12px 10px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background: color-mix(
+        in srgb,
+        var(--md-sys-color-surface-variant) 70%,
+        transparent
+    );
+    border: 1px solid
+        color-mix(in srgb, var(--md-sys-color-outline) 35%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: var(--md-sys-elevation-1);
+}
+
+.status-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.status-label {
+    font-size: 0.68rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--md-sys-color-on-surface-variant);
+    opacity: 0.85;
+}
+
+.status-value {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: var(--md-sys-color-on-surface);
+    font-weight: 700;
+}
+
+.status-hint {
+    font-size: 0.7rem;
+    color: var(--md-sys-color-on-surface-variant);
+    line-height: 1.25;
+    opacity: 0.9;
+}
 
 /* Wheel wrapper with GPU acceleration */
 .wheel-wrapper {
@@ -227,7 +291,7 @@ body {
 }
 
 /* ─── Result Overlay ──────────────────────────────────────────────────────── */
-/* No backdrop-filter — it creates a stacking context that blocks 
+/* No backdrop-filter — it creates a stacking context that blocks
    the confetti canvas (z-index 9999) from appearing above */
 .result-overlay {
     position: fixed;
@@ -416,7 +480,8 @@ body {
 .text-field:focus {
     outline: none;
     border-color: var(--md-sys-color-primary);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+    box-shadow: 0 0 0 2px
+        color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
 }
 
 .text-field::placeholder {
@@ -574,7 +639,7 @@ body {
         padding: 16px;
     }
 
-    .wheel-container {
+    .wheel-layout {
         gap: 2rem;
     }
 
@@ -600,7 +665,7 @@ body {
 
 /* ─── Projection mode ──────────────────────────────────────────────────────── */
 @media (min-width: 1920px) {
-    .wheel-container {
+    .wheel-layout {
         gap: clamp(3rem, 6vw, 6rem);
     }
 
@@ -611,7 +676,6 @@ body {
 
 /* ─── Reduced motion ───────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {
@@ -639,5 +703,75 @@ body {
         box-shadow:
             0 8px 32px rgba(0, 0, 0, 0.8),
             0 0 80px rgba(255, 255, 255, 0.5);
+    }
+}
+/* UX and accessibility overrides */
+.main {
+    position: relative;
+}
+
+.settings-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    border: none;
+    background: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.settings-drawer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 30;
+}
+
+.m3-button:focus-visible,
+.m3-icon-button:focus-visible,
+.m3-fab:focus-visible,
+.close-button:focus-visible,
+.palette-chip:focus-visible,
+.text-field:focus-visible,
+.option-text:focus-visible,
+.remove-button:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+}
+
+.m3-icon-button:active,
+.remove-button:active,
+.close-button:active {
+    transform: scale(0.96);
+}
+
+@media (max-width: 900px) {
+    .top-app-bar__actions {
+        gap: 6px;
+    }
+
+    .settings-backdrop {
+        position: fixed;
+        inset: 0;
+    }
+
+    .settings-drawer {
+        position: fixed;
+        right: 0;
+        left: 0;
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        min-width: 100%;
+        max-height: 78vh;
+        border-left: none;
+        border-top: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    .drawer-content {
+        max-height: calc(78vh - 160px);
+    }
+
+    .wheel-panel--info {
+        display: none;
     }
 }

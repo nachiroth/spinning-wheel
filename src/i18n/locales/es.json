@@ -48,5 +48,12 @@
     "english": "English",
     "spanish": "Español",
     "switch": "Cambiar idioma"
+  },
+  "status": {
+    "remainingLabel": "Restantes",
+    "modeLabel": "Modo",
+    "turnModeEnabled": "Modo turno activo",
+    "turnModeDisabled": "Modo normal",
+    "shortcutHint": "Presioná Enter para girar"
   }
 }

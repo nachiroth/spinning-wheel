@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Spinning Wheel Icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f1d2b" />
+      <stop offset="100%" stop-color="#2d2340" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)" />
+
+  <g transform="translate(128 128)">
+    <circle r="84" fill="#1b1926" stroke="#f8f7ff" stroke-opacity="0.1" stroke-width="4" />
+
+    <path d="M0 0 L78 0 A78 78 0 0 1 39 67.55 Z" fill="#ff5722" />
+    <path d="M0 0 L39 67.55 A78 78 0 0 1 -39 67.55 Z" fill="#ffc107" />
+    <path d="M0 0 L-39 67.55 A78 78 0 0 1 -78 0 Z" fill="#00bfa5" />
+    <path d="M0 0 L-78 0 A78 78 0 0 1 -39 -67.55 Z" fill="#6750a4" />
+    <path d="M0 0 L-39 -67.55 A78 78 0 0 1 39 -67.55 Z" fill="#e91e63" />
+    <path d="M0 0 L39 -67.55 A78 78 0 0 1 78 0 Z" fill="#ff9800" />
+
+    <circle r="22" fill="#1f1d2b" />
+    <circle r="10" fill="#ffffff" fill-opacity="0.8" />
+  </g>
+
+  <path d="M216 128 l-24 -14 v28z" fill="#ff1744" />
+</svg>

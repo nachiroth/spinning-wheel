@@ -1,204 +1,90 @@
-# Spinning Wheel 🎡
+# Spinning Wheel
 
-Una ruleta divertida para prendas, desafíos y juegos grupales. Construida con React 19, TypeScript y Tauri v2. Ideal para proyectar en pantalla grande durante reuniones, fiestas o actividades grupales.
+Ruleta de escritorio para desafíos grupales y decisiones rápidas al azar.
+Construida con React + TypeScript + Tauri v2.
 
 ## Idioma
 
-[🇬🇧 English](README.md) | [🇪🇸 Español](README.es.md)
+[English](README.md) | [Español](README.es.md)
 
-![Material Design 3](https://img.shields.io/badge/Material-Design%203-blue)
-![React](https://img.shields.io/badge/React-19-61dafb)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)
-![Tauri](https://img.shields.io/badge/Tauri-v2-24C8DB)
-![i18n](https://img.shields.io/badge/i18n-English%2FSpanish-green)
+## Características
 
-## ✨ Características
+- 5 paletas de color integradas
+- Lista de desafíos editable (agregar, editar, eliminar)
+- Modo turno (elimina opciones elegidas hasta completar todas)
+- Efectos de sonido con botón de silencio
+- Soporte de pantalla completa
+- Cambio de idioma inglés/español
+- Atajos de teclado (`Enter`, `Esc`)
+- Assets offline e íconos nativos generados
 
-- 🎨 **5 Paletas de Colores**: Atardecer Vibrante, Noche Eléctrica, Bosque Tropical, Ponche de Bayas, **Fiesta**
-- 🎊 **Pantalla de resultado clara**: Al parar la ruleta se muestra el desafío seleccionado en grande
-- 🔊 **Efectos de sonido**: Tictac durante el giro, fanfarria al parar (con botón de silencio)
-- 🌍 **Bilingüe**: Inglés y Español con cambio instantáneo
-- 🔄 **Modo Turno**: Elimina opciones después de cada giro hasta que todos participen
-- 🖥️ **Pantalla completa**: Perfecto para proyectores y pantallas grandes
-- 📱 **Diseño responsive**: Se adapta a cualquier tamaño de ventana
-- ⚡ **GPU Accelerated**: Animaciones fluidas con Framer Motion
-- 🔒 **100% Offline**: Fuentes, íconos y sonidos incluidos localmente
+## Stack
 
-## 🛠️ Stack Tecnológico
+- React 19
+- TypeScript
+- Vite
+- Framer Motion
+- i18next + react-i18next
+- Tauri v2 (Rust)
 
-| Capa | Tecnología |
-|------|------------|
-| **Frontend** | React 19, TypeScript, Vite |
-| **UI Framework** | Material Design 3 (custom) |
-| **Animaciones** | Framer Motion |
-| **Desktop** | Tauri v2 (backend Rust) |
-| **Audio** | Web Audio API (sintetizado) |
-| **Efectos** | Canvas Confetti |
-| **i18n** | react-i18next |
+## Requisitos
 
-## 📦 Instalación
+- Node.js 18+
+- npm
+- Toolchain de Rust (para compilar escritorio con Tauri)
 
-### Prerequisitos
-
-- **Node.js** 18+ y npm
-- **Rust** (para builds de Tauri) — Instalar desde [rustup.rs](https://rustup.rs)
-
-### Setup de Desarrollo
+## Ejecutar en Desarrollo
 
 ```bash
-cd spinning-wheel
-
-# Instalar dependencias
 npm install
-
-# Ejecutar en modo desarrollo
 npm run tauri dev
 ```
 
-## 🔨 Build para Producción
+## Build
 
 ```bash
-# Solo frontend
+# Build web
 npm run build
 
-# Build completo para la plataforma actual
+# Bundle de escritorio
 npm run tauri build
 ```
 
-Los artefactos quedan en:
+Los binarios de escritorio se generan en `src-tauri/target/release/bundle/`.
 
-```
-src-tauri/target/release/bundle/
-```
+## Atajos de Teclado
 
-#### Windows 🪟
-| Tipo | Ubicación | Formato |
-|------|-----------|---------|
-| Instalador | `msi/*.msi` | Windows Installer |
-| Portable | `binary/*.exe` | EXE sin instalación |
+- `Enter`: girar / continuar resultado / agregar opción (si estás escribiendo)
+- `Esc`: cerrar panel de configuración o cerrar overlay de resultado
 
-#### macOS 🍎
-| Tipo | Ubicación | Formato |
-|------|-----------|---------|
-| Instalador | `dmg/*.dmg` | Disk Image |
-| Portable | `macos/*.app` | App Bundle |
+## Estructura del Proyecto
 
-#### Linux 🐧
-| Tipo | Ubicación | Formato |
-|------|-----------|---------|
-| Debian | `deb/*.deb` | Para Debian/Ubuntu |
-| AppImage | `appimage/*.AppImage` | Linux universal |
-| RPM | `rpm/*.rpm` | Para Fedora/RHEL |
-
-### Dependencias del sistema (Linux/Debian)
-
-```bash
-sudo apt update
-sudo apt install -y libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
-npm run tauri build
-```
-
-## 📖 Uso
-
-### Operación básica
-
-1. **Girar la ruleta**: Click en el botón "¡Girar!" (o pulsar `Enter`)
-2. **Ver resultado**: Al parar, aparece el desafío seleccionado en grande
-3. **Continuar**: Click en "Continuar" para volver a la ruleta
-4. **Agregar desafíos**: Abrir Configuración (⚙️) → escribir en el campo → Agregar
-5. **Cambiar paleta**: En Configuración, seleccionar una de las 5 paletas
-6. **Silenciar**: Click en el ícono de volumen (🔊/🔇)
-7. **Idioma**: Click en el ícono de idioma para alternar EN/ES
-8. **Pantalla completa**: Click en ⛶ para modo presentación
-
-### Modo Turno
-
-Permite que todos participen eliminando opciones después de cada giro:
-
-1. Activar el ícono de turno 🔄 en la barra superior (se pone rojo)
-2. Girar — el desafío elegido queda marcado como "jugado"
-3. Click "Continuar" para seguir con las opciones restantes
-4. Cuando todos participaron, aparece la pantalla final 🎉
-
-## 🎨 Paletas de Colores
-
-| Paleta | Color semilla | Ideal para |
-|--------|---------------|------------|
-| **Atardecer Vibrante** | `#FF5722` | Energía, dinamismo |
-| **Noche Eléctrica** | `#6750A4` | Eventos modernos, tech |
-| **Bosque Tropical** | `#00BFA5` | Naturaleza, crecimiento |
-| **Ponche de Bayas** | `#984061` | Diversión, eventos festivos |
-| **Fiesta** | `#FF1744` | Fiestas, máxima energía 🎉 |
-
-## 🌐 Internacionalización (i18n)
-
-La app soporta **Inglés** (predeterminado) y **Español**.
-
-Las traducciones están en `src/i18n/locales/`:
-- `en.json` — Inglés
-- `es.json` — Español
-
-## 📁 Estructura del Proyecto
-
-```
+```text
 spinning-wheel/
 ├── src/
-│   ├── App.tsx                 # Componente principal
-│   ├── App.css                 # Estilos Material Design 3
-│   ├── main.tsx                # Punto de entrada React
-│   ├── i18n.ts                 # Configuración i18next
-│   ├── hooks/
-│   │   └── useAudio.ts         # Hook de audio (Web Audio API)
-│   ├── theme/
-│   │   └── m3-theme.ts         # Sistema de colores M3 + paletas
-│   └── assets/
-│       ├── fonts/              # Fuentes Roboto (offline)
-│       └── icons/              # Íconos Material (offline)
+│   ├── App.tsx
+│   ├── App.css
+│   ├── hooks/useAudio.ts
+│   ├── i18n.ts
+│   ├── i18n/locales/
+│   └── theme/m3-theme.ts
+├── public/
+│   └── app-icon.svg
 ├── src-tauri/
-│   ├── src/                    # Backend Rust
-│   ├── capabilities/           # Permisos Tauri
-│   ├── tauri.conf.json         # Configuración Tauri
-│   └── Cargo.toml              # Dependencias Rust
-├── index.html                  # Template HTML con CSP
-├── package.json                # Dependencias Node.js
-└── vite.config.ts              # Configuración Vite
+│   ├── src/
+│   ├── icons/
+│   └── tauri.conf.json
+├── README.md
+├── README.es.md
+├── USER_GUIDE.md
+└── USER_GUIDE.es.md
 ```
 
-## 🔒 Seguridad
+## Notas
 
-Content Security Policy estricta (sin llamadas externas):
+- La configuración se guarda en `localStorage`.
+- Los íconos nativos se generan desde `public/app-icon.svg` con:
 
-```html
-<meta http-equiv="Content-Security-Policy"
-  content="default-src 'self'; img-src 'self' asset: https://asset.localhost data: blob:; ...">
+```bash
+npm run tauri icon public/app-icon.svg
 ```
-
-## ⚡ Performance
-
-- **GPU Acceleration**: Animaciones con `transform` y `opacity`
-- **Canvas**: Renderizado 2D acelerado por hardware
-- **Web Audio API**: Sonidos sintetizados (sin archivos de audio externos)
-- **will-change**: Hints CSS para animaciones optimizadas
-
-## ❓ Troubleshooting
-
-### El sonido no funciona
-1. Verificar que el botón de silencio no esté activo (rojo = silenciado)
-2. Hacer click en cualquier parte para desbloquear el contexto de audio
-3. Verificar el volumen del sistema
-
-### La ruleta no gira
-1. Asegurarse de que haya al menos una opción
-2. Verificar que no se esté mostrando el resultado de un giro anterior
-3. Click en "Reiniciar" en Configuración
-
-### Texto ilegible en proyector
-1. Usar textos cortos (1-3 palabras, máximo 20 caracteres)
-2. Seleccionar la paleta "Fiesta" o "Atardecer Vibrante" (máximo contraste)
-3. Activar Pantalla Completa
-
----
-
-**Versión:** 1.0.0
-**Última actualización:** 2026
-**Plataformas:** Windows, macOS, Linux

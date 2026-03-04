@@ -48,5 +48,12 @@
     "english": "English",
     "spanish": "Español",
     "switch": "Switch language"
+  },
+  "status": {
+    "remainingLabel": "Remaining",
+    "modeLabel": "Mode",
+    "turnModeEnabled": "Turn mode on",
+    "turnModeDisabled": "Normal mode",
+    "shortcutHint": "Press Enter to spin"
   }
 }

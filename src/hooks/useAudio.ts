@@ -1,114 +1,146 @@
-/**
- * Audio Hook for Material Design 3 Spinning Wheel
- * Uses Web Audio API for synthesized sound effects
- * All sounds generated programmatically - no external files needed
- */
+import { useState, useCallback, useEffect, useRef } from "react";
 
-import { useState, useCallback, useEffect } from "react";
+const AUDIO_MUTE_KEY = "wheelMuted";
+const MIN_TICK_INTERVAL_SECONDS = 0.028;
 
 export function useAudio() {
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const masterGainRef = useRef<GainNode | null>(null);
+  const compressorRef = useRef<DynamicsCompressorNode | null>(null);
+  const lastTickTimeRef = useRef(0);
 
-  /**
-   * Initialize or get AudioContext
-   * Must be called on user interaction
-   */
-  const getAudioContext = useCallback(() => {
-    if (!audioContext) {
-      const ctx = new (
-        window.AudioContext || (window as any).webkitAudioContext
-      )();
-      setAudioContext(ctx);
-      return ctx;
+  const [isMuted, setIsMuted] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(AUDIO_MUTE_KEY) === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  const initializeAudioGraph = useCallback((audioContext: AudioContext) => {
+    if (masterGainRef.current && compressorRef.current) {
+      return;
     }
 
-    if (audioContext.state === "suspended") {
-      audioContext.resume().catch(console.error);
+    const masterGain = audioContext.createGain();
+    const compressor = audioContext.createDynamicsCompressor();
+
+    masterGain.gain.value = 0.95;
+    compressor.threshold.value = -8;
+    compressor.knee.value = 14;
+    compressor.ratio.value = 4;
+    compressor.attack.value = 0.002;
+    compressor.release.value = 0.15;
+
+    masterGain.connect(compressor);
+    compressor.connect(audioContext.destination);
+
+    masterGainRef.current = masterGain;
+    compressorRef.current = compressor;
+  }, []);
+
+  const getAudioContext = useCallback(async () => {
+    if (!audioContextRef.current) {
+      const AudioContextClass =
+        window.AudioContext || (window as any).webkitAudioContext;
+      audioContextRef.current = new AudioContextClass();
+      initializeAudioGraph(audioContextRef.current);
     }
 
-    return audioContext;
-  }, [audioContext]);
+    if (audioContextRef.current.state === "suspended") {
+      await audioContextRef.current.resume();
+    }
 
-  /**
-   * Play tick sound - soft click for segment transitions
-   */
-  const playTickSound = useCallback(() => {
-    if (isMuted || !audioContext) return;
+    return audioContextRef.current;
+  }, [initializeAudioGraph]);
+
+  const playTickSound = useCallback(async () => {
+    if (isMuted) return;
+
+    const audioContext = await getAudioContext();
+    const now = audioContext.currentTime;
+
+    if (now - lastTickTimeRef.current < MIN_TICK_INTERVAL_SECONDS) {
+      return;
+    }
+    lastTickTimeRef.current = now;
 
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
     oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    gainNode.connect(masterGainRef.current ?? audioContext.destination);
 
-    oscillator.frequency.value = 800;
-    oscillator.type = "sine";
+    oscillator.frequency.value = 910;
+    oscillator.type = "triangle";
 
-    const now = audioContext.currentTime;
-    gainNode.gain.setValueAtTime(0.1, now);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    gainNode.gain.setValueAtTime(0.12, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
 
     oscillator.start(now);
-    oscillator.stop(now + 0.05);
-  }, [isMuted, audioContext]);
+    oscillator.stop(now + 0.035);
+  }, [getAudioContext, isMuted]);
 
-  /**
-   * Play victory fanfare - ascending celebration sound
-   */
-  const playVictorySound = useCallback(() => {
-    if (isMuted || !audioContext) return;
+  const playVictorySound = useCallback(async () => {
+    if (isMuted) return;
 
+    const audioContext = await getAudioContext();
     const now = audioContext.currentTime;
     const frequencies = [523.25, 659.25, 783.99, 1046.5, 1318.51];
 
-    frequencies.forEach((freq, index) => {
+    frequencies.forEach((frequency, index) => {
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 
       oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
+      gainNode.connect(masterGainRef.current ?? audioContext.destination);
 
-      oscillator.frequency.value = freq;
+      oscillator.frequency.value = frequency;
       oscillator.type = "sine";
 
-      const startTime = now + index * 0.1;
-      gainNode.gain.setValueAtTime(0, startTime);
-      gainNode.gain.linearRampToValueAtTime(0.2, startTime + 0.05);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+      const start = now + index * 0.08;
+      gainNode.gain.setValueAtTime(0, start);
+      gainNode.gain.linearRampToValueAtTime(0.2, start + 0.04);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, start + 0.26);
 
-      oscillator.start(startTime);
-      oscillator.stop(startTime + 0.3);
+      oscillator.start(start);
+      oscillator.stop(start + 0.26);
     });
-  }, [isMuted, audioContext]);
+  }, [getAudioContext, isMuted]);
 
-  /**
-   * Toggle mute
-   */
   const toggleMute = useCallback(() => {
-    setIsMuted((prev) => !prev);
+    setIsMuted((previous) => !previous);
   }, []);
 
-  /**
-   * Initialize audio on first user interaction
-   */
+  useEffect(() => {
+    try {
+      localStorage.setItem(AUDIO_MUTE_KEY, String(isMuted));
+    } catch {
+      // Ignore write failures (private mode / storage disabled)
+    }
+  }, [isMuted]);
+
   useEffect(() => {
     const initAudio = () => {
-      getAudioContext();
+      getAudioContext().catch(console.error);
     };
 
-    document.addEventListener("click", initAudio, { once: true });
-    document.addEventListener("keydown", initAudio, { once: true });
+    window.addEventListener("pointerdown", initAudio, { once: true });
+    window.addEventListener("keydown", initAudio, { once: true });
 
     return () => {
-      document.removeEventListener("click", initAudio);
-      document.removeEventListener("keydown", initAudio);
+      window.removeEventListener("pointerdown", initAudio);
+      window.removeEventListener("keydown", initAudio);
 
-      if (audioContext) {
-        audioContext.close();
+      if (audioContextRef.current) {
+        audioContextRef.current.close().catch(console.error);
+        audioContextRef.current = null;
       }
+      masterGainRef.current = null;
+      compressorRef.current = null;
+      lastTickTimeRef.current = 0;
     };
-  }, [getAudioContext, audioContext]);
+  }, [getAudioContext]);
 
   return {
     playTickSound,
