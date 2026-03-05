@@ -50,6 +50,7 @@ export interface M3ColorScheme {
  * Each palette has 6 vibrant, high-contrast colors
  */
 export interface WheelPalette {
+  i18nKey: string;
   name: string;
   seedColor: string;
   colors: string[];
@@ -63,6 +64,7 @@ export interface WheelPalette {
  */
 export const WHEEL_PALETTES: WheelPalette[] = [
   {
+    i18nKey: "vibrantsunset",
     name: "Vibrant Sunset",
     seedColor: "#FF5A36",
     colors: [
@@ -77,6 +79,7 @@ export const WHEEL_PALETTES: WheelPalette[] = [
     surface: "#272231",
   },
   {
+    i18nKey: "electricnight",
     name: "Electric Night",
     seedColor: "#6C5CE7",
     colors: [
@@ -91,6 +94,7 @@ export const WHEEL_PALETTES: WheelPalette[] = [
     surface: "#1F2840",
   },
   {
+    i18nKey: "tropicalforest",
     name: "Tropical Forest",
     seedColor: "#00A878",
     colors: [
@@ -105,6 +109,7 @@ export const WHEEL_PALETTES: WheelPalette[] = [
     surface: "#1B2D2A",
   },
   {
+    i18nKey: "berrypunch",
     name: "Berry Punch",
     seedColor: "#C9184A",
     colors: [
@@ -119,6 +124,7 @@ export const WHEEL_PALETTES: WheelPalette[] = [
     surface: "#2B1D35",
   },
   {
+    i18nKey: "fiesta",
     name: "Fiesta",
     seedColor: "#FF006E",
     colors: [

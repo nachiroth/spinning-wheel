@@ -182,9 +182,9 @@ function App() {
   const modeLabel = turnMode
     ? t("status.turnModeEnabled")
     : t("status.turnModeDisabled");
-  const currentPaletteLabel = t(
-    `palettes.${currentPalette.name.toLowerCase().replace(/\s+/g, "")}` as const,
-  );
+  const getPaletteLabel = (palette: (typeof WHEEL_PALETTES)[number]) =>
+    t(`palettes.${palette.i18nKey}`, { defaultValue: palette.name });
+  const currentPaletteLabel = getPaletteLabel(currentPalette);
   const fadeTransition = shouldReduceMotion
     ? { duration: 0.01 }
     : { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
@@ -1166,12 +1166,8 @@ function App() {
                             hideTouchPaletteTooltip();
                           }}
                           onBlur={hideTouchPaletteTooltip}
-                          aria-label={t(
-                            `palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const,
-                          )}
-                          data-name={t(
-                            `palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const,
-                          )}
+                          aria-label={getPaletteLabel(palette)}
+                          data-name={getPaletteLabel(palette)}
                           style={{
                             borderColor:
                               paletteIndex === index
@@ -1191,9 +1187,7 @@ function App() {
                               ))}
                           </div>
                           <span className="sr-only">
-                            {t(
-                              `palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const,
-                            )}
+                            {getPaletteLabel(palette)}
                           </span>
                         </motion.button>
                       ))}
