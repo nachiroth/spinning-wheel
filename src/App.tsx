@@ -8,7 +8,6 @@ import {
   defaultTheme,
   WHEEL_PALETTES,
   shape,
-  elevation,
   typography,
   getContrastingTextColor,
 } from "./theme/m3-theme";
@@ -75,6 +74,20 @@ function sanitizeOptions(input: unknown): WheelOption[] {
     .filter((opt) => opt.text.length > 0);
 }
 
+function isInteractiveElement(target: HTMLElement | null): boolean {
+  if (!target) return false;
+
+  const tagName = target.tagName;
+  return (
+    tagName === "INPUT" ||
+    tagName === "TEXTAREA" ||
+    tagName === "BUTTON" ||
+    tagName === "A" ||
+    tagName === "SELECT" ||
+    target.isContentEditable
+  );
+}
+
 function loadSettings(language: string): AppSettings {
   const localizedDefaults = getDefaultOptions(language);
 
@@ -111,11 +124,18 @@ function loadSettings(language: string): AppSettings {
 
 function App() {
   const { t, i18n } = useTranslation();
+  const initialSettingsRef = useRef<AppSettings | null>(null);
+  if (!initialSettingsRef.current) {
+    initialSettingsRef.current = loadSettings(
+      i18n.resolvedLanguage ?? i18n.language,
+    );
+  }
+
   const [options, setOptions] = useState<WheelOption[]>(
-    () => loadSettings(i18n.resolvedLanguage ?? i18n.language).options,
+    () => initialSettingsRef.current!.options,
   );
   const [paletteIndex, setPaletteIndex] = useState<number>(
-    () => loadSettings(i18n.resolvedLanguage ?? i18n.language).paletteIndex,
+    () => initialSettingsRef.current!.paletteIndex,
   );
   const [newOptionText, setNewOptionText] = useState("");
   const [isSpinning, setIsSpinning] = useState(false);
@@ -134,6 +154,11 @@ function App() {
   const [resultText, setResultText] = useState("");
   const [resultColor, setResultColor] = useState("");
   const [wheelSize, setWheelSize] = useState(400);
+  const [spinCharge, setSpinCharge] = useState(0);
+  const [isChargingSpin, setIsChargingSpin] = useState(false);
+  const [touchTooltipPaletteIndex, setTouchTooltipPaletteIndex] = useState<
+    number | null
+  >(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastSegmentIndexRef = useRef<number | null>(null);
@@ -141,6 +166,10 @@ function App() {
   const containerRef = useRef<HTMLDivElement>(null);
   const confettiActiveRef = useRef(false);
   const myConfetti = useRef<confetti.CreateTypes | null>(null);
+  const spinChargeFrameRef = useRef<number | null>(null);
+  const spinChargeStartRef = useRef<number | null>(null);
+  const enterChargingRef = useRef(false);
+  const paletteTooltipTimerRef = useRef<number | null>(null);
 
   const { playTickSound, playVictorySound, isMuted, toggleMute } = useAudio();
   const currentPalette = WHEEL_PALETTES[paletteIndex];
@@ -153,6 +182,9 @@ function App() {
   const modeLabel = turnMode
     ? t("status.turnModeEnabled")
     : t("status.turnModeDisabled");
+  const currentPaletteLabel = t(
+    `palettes.${currentPalette.name.toLowerCase().replace(/\s+/g, "")}` as const,
+  );
   const fadeTransition = shouldReduceMotion
     ? { duration: 0.01 }
     : { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
@@ -255,110 +287,121 @@ function App() {
     setResultText("");
   }, [activeOptions, pendingEliminationId, stopConfetti, turnMode]);
 
-  const spin = useCallback(() => {
-    if (
-      isSpinning ||
-      showRoundComplete ||
-      showContinue ||
-      activeOptions.length === 0
-    ) {
-      return;
-    }
-
-    setIsSpinning(true);
-
-    const spinDuration = shouldReduceMotion
-      ? 900 + Math.random() * 300
-      : 4000 + Math.random() * 1600;
-    const initialVelocity = 20 + Math.random() * 10;
-    const startRotation = rotation;
-    const anticipationRotation = shouldReduceMotion ? -1 : -2;
-    const anticipationDuration = shouldReduceMotion ? 70 : 150;
-    const anticipationStart = performance.now();
-
-    const animateAnticipation = (currentTime: number) => {
-      const elapsed = currentTime - anticipationStart;
-      const progress = Math.min(elapsed / anticipationDuration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-
-      setRotation(startRotation + anticipationRotation * easeOut * progress);
-
-      if (progress < 1) {
-        animationFrameRef.current = requestAnimationFrame(animateAnticipation);
+  const spin = useCallback(
+    (power?: number) => {
+      if (
+        isSpinning ||
+        showRoundComplete ||
+        showContinue ||
+        activeOptions.length === 0
+      ) {
         return;
       }
 
-      const mainStart = performance.now();
+      setIsSpinning(true);
 
-      const animateSpin = (time: number) => {
-        const elapsedMain = time - mainStart;
-        const progressMain = Math.min(elapsedMain / spinDuration, 1);
-        const easeOutMain = 1 - Math.pow(1 - progressMain, 3);
+      const normalizedPower =
+        typeof power === "number"
+          ? Math.max(0.02, Math.min(1, power))
+          : 0.2 + Math.random() * 0.8;
+      const randomFactor = 0.92 + Math.random() * 0.16;
+      const spinDuration = shouldReduceMotion
+        ? (380 + normalizedPower * 900) * randomFactor
+        : (700 + normalizedPower * 4200) * randomFactor;
+      const targetTurns = shouldReduceMotion
+        ? 1 + normalizedPower * 4 + Math.random() * 0.8
+        : 2 + normalizedPower * 14 + Math.random() * 1.4;
+      const startRotation = rotation;
+      const anticipationRotation = shouldReduceMotion ? -1 : -2;
+      const anticipationDuration = shouldReduceMotion ? 70 : 150;
+      const anticipationStart = performance.now();
 
-        const totalRotation =
-          startRotation +
-          anticipationRotation +
-          initialVelocity * easeOutMain * 100;
+      const animateAnticipation = (currentTime: number) => {
+        const elapsed = currentTime - anticipationStart;
+        const progress = Math.min(elapsed / anticipationDuration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
 
-        setRotation(totalRotation);
+        setRotation(startRotation + anticipationRotation * easeOut * progress);
 
-        if (progressMain < 1) {
-          animationFrameRef.current = requestAnimationFrame(animateSpin);
+        if (progress < 1) {
+          animationFrameRef.current =
+            requestAnimationFrame(animateAnticipation);
           return;
         }
 
-        const normalizedRotation = ((totalRotation % 360) + 360) % 360;
-        const winningAngle =
-          (((2 * Math.PI - (normalizedRotation * Math.PI) / 180) %
-            (2 * Math.PI)) +
-            2 * Math.PI) %
-          (2 * Math.PI);
-        const winningIndex =
-          Math.floor(winningAngle / segmentAngle) % activeOptions.length;
-        const winningOption = activeOptions[winningIndex];
-        const winningColor =
-          currentPalette.colors[winningIndex % currentPalette.colors.length];
+        const mainStart = performance.now();
 
-        setIsSpinning(false);
-        setResultText(winningOption.text);
-        setResultColor(winningColor);
-        playVictorySound();
+        const animateSpin = (time: number) => {
+          const elapsedMain = time - mainStart;
+          const progressMain = Math.min(elapsedMain / spinDuration, 1);
+          const easeOutMain = 1 - Math.pow(1 - progressMain, 3);
 
-        if (turnMode) {
-          setPendingEliminationId(winningOption.id);
-        }
+          const totalRotation =
+            startRotation +
+            anticipationRotation +
+            targetTurns * 360 * easeOutMain;
 
-        if (!turnMode && activeOptions.length <= 1) {
-          setShowRoundComplete(true);
-        } else {
-          setShowContinue(true);
-        }
+          setRotation(totalRotation);
 
-        confettiActiveRef.current = true;
-        setTimeout(() => {
-          if (confettiActiveRef.current) {
-            triggerConfetti();
+          if (progressMain < 1) {
+            animationFrameRef.current = requestAnimationFrame(animateSpin);
+            return;
           }
-        }, 260);
+
+          const normalizedRotation = ((totalRotation % 360) + 360) % 360;
+          const winningAngle =
+            (((2 * Math.PI - (normalizedRotation * Math.PI) / 180) %
+              (2 * Math.PI)) +
+              2 * Math.PI) %
+            (2 * Math.PI);
+          const winningIndex =
+            Math.floor(winningAngle / segmentAngle) % activeOptions.length;
+          const winningOption = activeOptions[winningIndex];
+          const winningColor =
+            currentPalette.colors[winningIndex % currentPalette.colors.length];
+
+          setIsSpinning(false);
+          setResultText(winningOption.text);
+          setResultColor(winningColor);
+          playVictorySound();
+
+          if (turnMode) {
+            setPendingEliminationId(winningOption.id);
+          }
+
+          if (!turnMode && activeOptions.length <= 1) {
+            setShowRoundComplete(true);
+          } else {
+            setShowContinue(true);
+          }
+
+          confettiActiveRef.current = true;
+          setTimeout(() => {
+            if (confettiActiveRef.current) {
+              triggerConfetti();
+            }
+          }, 260);
+        };
+
+        animationFrameRef.current = requestAnimationFrame(animateSpin);
       };
 
-      animationFrameRef.current = requestAnimationFrame(animateSpin);
-    };
-
-    animationFrameRef.current = requestAnimationFrame(animateAnticipation);
-  }, [
-    activeOptions,
-    currentPalette.colors,
-    isSpinning,
-    playVictorySound,
-    rotation,
-    segmentAngle,
-    showContinue,
-    showRoundComplete,
-    triggerConfetti,
-    turnMode,
-    shouldReduceMotion,
-  ]);
+      animationFrameRef.current = requestAnimationFrame(animateAnticipation);
+    },
+    [
+      activeOptions,
+      currentPalette.colors,
+      isSpinning,
+      playVictorySound,
+      rotation,
+      segmentAngle,
+      showContinue,
+      showRoundComplete,
+      triggerConfetti,
+      turnMode,
+      shouldReduceMotion,
+    ],
+  );
 
   const addOption = useCallback(() => {
     const text = newOptionText.trim();
@@ -423,6 +466,83 @@ function App() {
   const toggleLanguage = useCallback(() => {
     i18n.changeLanguage(i18n.language === "en" ? "es" : "en");
   }, [i18n]);
+
+  const stopChargingAnimation = useCallback(() => {
+    if (spinChargeFrameRef.current !== null) {
+      cancelAnimationFrame(spinChargeFrameRef.current);
+      spinChargeFrameRef.current = null;
+    }
+    spinChargeStartRef.current = null;
+  }, []);
+
+  const clearPaletteTooltipTimer = useCallback(() => {
+    if (paletteTooltipTimerRef.current !== null) {
+      window.clearTimeout(paletteTooltipTimerRef.current);
+      paletteTooltipTimerRef.current = null;
+    }
+  }, []);
+
+  const hideTouchPaletteTooltip = useCallback(() => {
+    clearPaletteTooltipTimer();
+    setTouchTooltipPaletteIndex(null);
+  }, [clearPaletteTooltipTimer]);
+
+  const startSpinCharge = useCallback(() => {
+    if (
+      isSpinning ||
+      showRoundComplete ||
+      showContinue ||
+      activeOptions.length === 0
+    ) {
+      return;
+    }
+
+    stopChargingAnimation();
+    setIsChargingSpin(true);
+    setSpinCharge(0);
+    spinChargeStartRef.current = performance.now();
+
+    const CHARGE_TIME_MS = shouldReduceMotion ? 700 : 1600;
+    const tick = (now: number) => {
+      if (spinChargeStartRef.current === null) return;
+      const elapsed = now - spinChargeStartRef.current;
+      const nextCharge = Math.min(elapsed / CHARGE_TIME_MS, 1);
+      setSpinCharge(nextCharge);
+
+      if (nextCharge < 1) {
+        spinChargeFrameRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    spinChargeFrameRef.current = requestAnimationFrame(tick);
+  }, [
+    activeOptions.length,
+    isSpinning,
+    shouldReduceMotion,
+    showContinue,
+    showRoundComplete,
+    stopChargingAnimation,
+  ]);
+
+  const releaseSpinCharge = useCallback(() => {
+    if (!isChargingSpin) return;
+
+    const holdStartedAt = spinChargeStartRef.current;
+    const holdDuration =
+      holdStartedAt !== null ? performance.now() - holdStartedAt : 0;
+
+    stopChargingAnimation();
+    setIsChargingSpin(false);
+
+    const isQuickTap = holdDuration < 70 && spinCharge < 0.02;
+    const appliedPower = Math.max(spinCharge, 0.02);
+    setSpinCharge(0);
+    if (isQuickTap) {
+      spin();
+      return;
+    }
+    spin(appliedPower);
+  }, [isChargingSpin, spin, spinCharge, stopChargingAnimation]);
 
   useEffect(() => {
     const canvas = document.createElement("canvas");
@@ -672,9 +792,11 @@ function App() {
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      stopChargingAnimation();
+      clearPaletteTooltipTimer();
       stopConfetti();
     };
-  }, [stopConfetti]);
+  }, [clearPaletteTooltipTimer, stopChargingAnimation, stopConfetti]);
 
   useEffect(() => {
     const syncFullscreen = async () => {
@@ -692,10 +814,12 @@ function App() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
+      const tagName = target?.tagName ?? "";
       const isInputTarget =
-        target?.tagName === "INPUT" ||
-        target?.tagName === "TEXTAREA" ||
+        tagName === "INPUT" ||
+        tagName === "TEXTAREA" ||
         target?.isContentEditable;
+      const isInteractiveTarget = isInteractiveElement(target);
 
       if (event.key === "Escape") {
         if (showSettings) {
@@ -717,6 +841,10 @@ function App() {
         return;
       }
 
+      if (isInteractiveTarget) {
+        return;
+      }
+
       if (showSettings) {
         return;
       }
@@ -731,7 +859,10 @@ function App() {
         return;
       }
 
-      spin();
+      if (event.repeat || enterChargingRef.current) return;
+      event.preventDefault();
+      enterChargingRef.current = true;
+      startSpinCharge();
     };
 
     window.addEventListener("keydown", onKeyDown);
@@ -740,11 +871,47 @@ function App() {
     addOption,
     handleContinue,
     resetGame,
+    startSpinCharge,
     showContinue,
     showRoundComplete,
     showSettings,
-    spin,
   ]);
+
+  useEffect(() => {
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key !== "Enter") return;
+
+      const target = event.target as HTMLElement | null;
+      const isInteractiveTarget = isInteractiveElement(target);
+
+      if (
+        isInteractiveTarget ||
+        showSettings ||
+        showContinue ||
+        showRoundComplete ||
+        !enterChargingRef.current
+      ) {
+        return;
+      }
+
+      enterChargingRef.current = false;
+      releaseSpinCharge();
+    };
+
+    window.addEventListener("keyup", onKeyUp);
+    return () => window.removeEventListener("keyup", onKeyUp);
+  }, [releaseSpinCharge, showContinue, showRoundComplete, showSettings]);
+
+  useEffect(() => {
+    const onWindowBlur = () => {
+      if (!enterChargingRef.current) return;
+      enterChargingRef.current = false;
+      releaseSpinCharge();
+    };
+
+    window.addEventListener("blur", onWindowBlur);
+    return () => window.removeEventListener("blur", onWindowBlur);
+  }, [releaseSpinCharge]);
 
   return (
     <div className="app" style={{ background: currentPalette.background }}>
@@ -754,69 +921,76 @@ function App() {
         animate={{ y: 0, opacity: 1 }}
         transition={fadeTransition}
       >
-        <div className="top-app-bar__actions">
-          <M3IconButton
-            icon="language"
-            active={false}
-            onClick={toggleLanguage}
-            title={`${t("language.switch")} (${i18n.language === "en" ? "English" : "Español"})`}
-            size="large"
-            reducedMotion={shouldReduceMotion}
-          >
-            <span
-              style={{
-                fontSize: "0.65rem",
-                fontWeight: 700,
-                position: "absolute",
-                bottom: "4px",
-                right: "7px",
-                color: "inherit",
-              }}
+        <div className="top-app-bar__inner">
+          <div className="top-app-bar__brand">
+            <p className="brand-title">{t("app.title")}</p>
+            <p className="brand-meta">{currentPaletteLabel}</p>
+          </div>
+
+          <div className="top-app-bar__actions">
+            <M3IconButton
+              icon="language"
+              active={false}
+              onClick={toggleLanguage}
+              title={`${t("language.switch")} (${i18n.language === "en" ? "English" : "Español"})`}
+              size="large"
+              reducedMotion={shouldReduceMotion}
             >
-              {i18n.language === "en" ? "EN" : "ES"}
-            </span>
-          </M3IconButton>
+              <span
+                style={{
+                  fontSize: "0.65rem",
+                  fontWeight: 700,
+                  position: "absolute",
+                  bottom: "4px",
+                  right: "7px",
+                  color: "inherit",
+                }}
+              >
+                {i18n.language === "en" ? "EN" : "ES"}
+              </span>
+            </M3IconButton>
 
-          <M3IconButton
-            icon={isMuted ? "volume-off" : "volume-on"}
-            active={isMuted}
-            onClick={toggleMute}
-            title={isMuted ? t("controls.unmute") : t("controls.mute")}
-            size="large"
-            reducedMotion={shouldReduceMotion}
-          />
+            <M3IconButton
+              icon={isMuted ? "volume-off" : "volume-on"}
+              active={isMuted}
+              onClick={toggleMute}
+              title={isMuted ? t("controls.unmute") : t("controls.mute")}
+              size="large"
+              reducedMotion={shouldReduceMotion}
+            />
 
-          <M3IconButton
-            icon={turnMode ? "eliminate-active" : "eliminate"}
-            active={turnMode}
-            onClick={() => setTurnMode((prev) => !prev)}
-            title={
-              turnMode
-                ? t("controls.disableTurnMode")
-                : t("controls.enableTurnMode")
-            }
-            reducedMotion={shouldReduceMotion}
-          />
+            <M3IconButton
+              icon={turnMode ? "eliminate-active" : "eliminate"}
+              active={turnMode}
+              onClick={() => setTurnMode((prev) => !prev)}
+              title={
+                turnMode
+                  ? t("controls.disableTurnMode")
+                  : t("controls.enableTurnMode")
+              }
+              reducedMotion={shouldReduceMotion}
+            />
 
-          <M3IconButton
-            icon={isFullscreen ? "fullscreen-exit" : "fullscreen"}
-            active={isFullscreen}
-            onClick={toggleFullscreen}
-            title={
-              isFullscreen
-                ? t("controls.exitFullscreen")
-                : t("controls.fullscreen")
-            }
-            reducedMotion={shouldReduceMotion}
-          />
+            <M3IconButton
+              icon={isFullscreen ? "fullscreen-exit" : "fullscreen"}
+              active={isFullscreen}
+              onClick={toggleFullscreen}
+              title={
+                isFullscreen
+                  ? t("controls.exitFullscreen")
+                  : t("controls.fullscreen")
+              }
+              reducedMotion={shouldReduceMotion}
+            />
 
-          <M3IconButton
-            icon="settings"
-            active={showSettings}
-            onClick={() => setShowSettings((prev) => !prev)}
-            title={t("controls.settings")}
-            reducedMotion={shouldReduceMotion}
-          />
+            <M3IconButton
+              icon="settings"
+              active={showSettings}
+              onClick={() => setShowSettings((prev) => !prev)}
+              title={t("controls.settings")}
+              reducedMotion={shouldReduceMotion}
+            />
+          </div>
         </div>
       </motion.header>
 
@@ -824,49 +998,31 @@ function App() {
         <div className="wheel-section" ref={containerRef}>
           <div className="wheel-layout">
             <div className="wheel-panel">
-              <AnimatePresence mode="wait">
-                {!isSpinning &&
-                  !showRoundComplete &&
-                  !showContinue &&
-                  activeOptions.length > 0 && (
-                    <motion.div
-                      key="spin"
-                      initial={
-                        shouldReduceMotion
-                          ? { opacity: 0 }
-                          : { scale: 0.9, opacity: 0 }
-                      }
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={
-                        shouldReduceMotion
-                          ? { opacity: 0 }
-                          : { scale: 0.9, opacity: 0 }
-                      }
-                      transition={springTransition}
-                    >
-                      <MFab
-                        onClick={spin}
-                        icon="play"
-                        size="large"
-                        reducedMotion={shouldReduceMotion}
-                      >
-                        {t("controls.spin")}
-                      </MFab>
-                    </motion.div>
-                  )}
-
-                {activeOptions.length === 0 && !showRoundComplete && (
-                  <motion.div
-                    key="empty"
-                    className="empty-message"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    {t("settings.noOptions")}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <motion.div
+                initial={
+                  shouldReduceMotion
+                    ? { opacity: 0 }
+                    : { scale: 0.9, opacity: 0 }
+                }
+                animate={{ scale: 1, opacity: 1 }}
+                transition={springTransition}
+              >
+                <SpinPowerButton
+                  charge={spinCharge}
+                  charging={isChargingSpin}
+                  disabled={
+                    isSpinning ||
+                    showContinue ||
+                    showRoundComplete ||
+                    activeOptions.length === 0
+                  }
+                  onChargeStart={startSpinCharge}
+                  onChargeRelease={releaseSpinCharge}
+                  label={t("controls.spin")}
+                  hint={t("controls.holdToCharge")}
+                  reducedMotion={shouldReduceMotion}
+                />
+              </motion.div>
             </div>
 
             <motion.div
@@ -982,10 +1138,40 @@ function App() {
                         <motion.button
                           type="button"
                           key={palette.name}
-                          className={`palette-chip ${paletteIndex === index ? "selected" : ""}`}
-                          onClick={() => setPaletteIndex(index)}
-                          whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
-                          whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                          className={`palette-chip ${paletteIndex === index ? "selected" : ""} ${touchTooltipPaletteIndex === index ? "tooltip-visible" : ""}`}
+                          onClick={() => {
+                            hideTouchPaletteTooltip();
+                            setPaletteIndex(index);
+                          }}
+                          onPointerDown={(event) => {
+                            if (event.pointerType !== "touch") return;
+                            clearPaletteTooltipTimer();
+                            paletteTooltipTimerRef.current = window.setTimeout(
+                              () => {
+                                setTouchTooltipPaletteIndex(index);
+                              },
+                              320,
+                            );
+                          }}
+                          onPointerUp={(event) => {
+                            if (event.pointerType !== "touch") return;
+                            hideTouchPaletteTooltip();
+                          }}
+                          onPointerCancel={(event) => {
+                            if (event.pointerType !== "touch") return;
+                            hideTouchPaletteTooltip();
+                          }}
+                          onPointerLeave={(event) => {
+                            if (event.pointerType !== "touch") return;
+                            hideTouchPaletteTooltip();
+                          }}
+                          onBlur={hideTouchPaletteTooltip}
+                          aria-label={t(
+                            `palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const,
+                          )}
+                          data-name={t(
+                            `palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const,
+                          )}
                           style={{
                             borderColor:
                               paletteIndex === index
@@ -1004,16 +1190,9 @@ function App() {
                                 />
                               ))}
                           </div>
-                          <span
-                            style={{
-                              ...typography.labelSmall,
-                              color: defaultTheme.onSurface,
-                            }}
-                          >
+                          <span className="sr-only">
                             {t(
-                              `palettes.${palette.name
-                                .toLowerCase()
-                                .replace(/\s+/g, "")}` as const,
+                              `palettes.${palette.name.toLowerCase().replace(/\s+/g, "")}` as const,
                             )}
                           </span>
                         </motion.button>
@@ -1371,56 +1550,76 @@ function M3IconButton({
   );
 }
 
-interface MFabProps {
-  icon?: string;
-  size?: "medium" | "large";
-  onClick?: () => void;
-  children?: React.ReactNode;
+interface SpinPowerButtonProps {
+  charge: number;
+  charging: boolean;
+  disabled?: boolean;
+  onChargeStart: () => void;
+  onChargeRelease: () => void;
+  label: string;
+  hint: string;
   reducedMotion?: boolean;
 }
 
-function MFab({
-  icon = "play",
-  size = "medium",
-  onClick,
-  children,
+function SpinPowerButton({
+  charge,
+  charging,
+  disabled = false,
+  onChargeStart,
+  onChargeRelease,
+  label,
+  hint,
   reducedMotion = false,
-}: MFabProps) {
+}: SpinPowerButtonProps) {
   return (
     <motion.button
       type="button"
-      className="m3-fab"
-      onClick={onClick}
-      style={{
-        background: "var(--md-sys-color-primary-container)",
-        color: "var(--md-sys-color-on-primary-container)",
-        border: "none",
-        borderRadius: shape.cornerLarge,
-        height: size === "large" ? "56px" : "40px",
-        padding: size === "large" ? "0 28px" : "0 16px",
-        fontSize: size === "large" ? "1rem" : "0.9375rem",
-        fontWeight: 500,
-        fontFamily: "'Roboto', sans-serif",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "12px",
-        cursor: "pointer",
-        boxShadow: elevation[2],
-        whiteSpace: "nowrap",
+      className={`spin-power-button ${charging ? "charging" : ""} ${disabled ? "disabled" : ""}`}
+      aria-label={`${label}. ${hint}`}
+      aria-disabled={disabled}
+      onPointerDown={() => {
+        if (!disabled) onChargeStart();
       }}
-      whileHover={reducedMotion ? {} : { scale: 1.05, boxShadow: elevation[3] }}
-      whileTap={reducedMotion ? {} : { scale: 0.95 }}
+      onPointerUp={() => {
+        if (!disabled) onChargeRelease();
+      }}
+      onPointerCancel={() => {
+        if (!disabled) onChargeRelease();
+      }}
+      onPointerLeave={() => {
+        if (!disabled) onChargeRelease();
+      }}
+      onKeyDown={(event) => {
+        if (disabled) return;
+        if ((event.key === "Enter" || event.key === " ") && !event.repeat) {
+          event.preventDefault();
+          onChargeStart();
+        }
+      }}
+      onKeyUp={(event) => {
+        if (disabled) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onChargeRelease();
+        }
+      }}
+      onContextMenu={(event) => event.preventDefault()}
+      style={{ ["--spin-charge" as string]: charge } as React.CSSProperties}
+      whileHover={reducedMotion ? {} : { scale: 1.02 }}
+      whileTap={reducedMotion ? {} : { scale: 0.98 }}
     >
-      {icon && (
-        <svg
-          width={size === "large" ? 24 : 20}
-          height={size === "large" ? 24 : 20}
-          fill="currentColor"
-        >
-          <use href={`#icon-${icon}`} />
+      <span className="spin-power-icon" aria-hidden>
+        <svg width="22" height="22" fill="currentColor">
+          <use href="#icon-play" />
         </svg>
-      )}
-      {children && <span>{children}</span>}
+      </span>
+      <span className="spin-power-content">
+        <span className="spin-power-label">{label}</span>
+        <span className="spin-power-hint">{hint}</span>
+      </span>
+      <span className="spin-power-percent" aria-hidden>
+        {Math.round(charge * 100)}%
+      </span>
     </motion.button>
   );
 }

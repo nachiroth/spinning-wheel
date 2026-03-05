@@ -5,6 +5,7 @@
   },
   "controls": {
     "spin": "¡Girar!",
+    "holdToCharge": "Mantené para cargar potencia",
     "mute": "Silenciar sonido",
     "unmute": "Activar sonido",
     "turnMode": "Modo turno",

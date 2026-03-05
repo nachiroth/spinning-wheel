@@ -5,6 +5,7 @@
   },
   "controls": {
     "spin": "Spin!",
+    "holdToCharge": "Hold to charge power",
     "mute": "Mute sound",
     "unmute": "Unmute sound",
     "turnMode": "Turn mode",

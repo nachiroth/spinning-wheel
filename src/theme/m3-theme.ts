@@ -64,73 +64,73 @@ export interface WheelPalette {
 export const WHEEL_PALETTES: WheelPalette[] = [
   {
     name: "Vibrant Sunset",
-    seedColor: "#FF5722",
+    seedColor: "#FF5A36",
     colors: [
-      "#FF5722", // Deep Orange
-      "#FFC107", // Amber
-      "#FF3D00", // Bright Red-Orange
-      "#FF9800", // Warm Orange
-      "#FFEB3B", // Bright Yellow
-      "#FF7043", // Light Deep Orange
+      "#FF5A36", // Hot orange
+      "#FF8E3C", // Sunset orange
+      "#FFB95A", // Warm amber
+      "#E63946", // Coral red
+      "#F77F00", // Flame orange
+      "#D7263D", // Punch red
     ],
-    background: "#1C1B1F",
-    surface: "#2A2830",
+    background: "#18151F",
+    surface: "#272231",
   },
   {
     name: "Electric Night",
-    seedColor: "#6750A4",
+    seedColor: "#6C5CE7",
     colors: [
-      "#6750A4", // Royal Purple
-      "#3F51B5", // Deep Blue
-      "#00BCD4", // Vivid Cyan
-      "#E91E63", // Magenta
-      "#7C4DFF", // Bright Purple
-      "#00E5FF", // Light Cyan
+      "#6C5CE7", // Electric indigo
+      "#3A86FF", // Charged blue
+      "#00B4D8", // Neon cyan
+      "#8338EC", // Violet
+      "#4361EE", // Royal blue
+      "#00A6FB", // Sky electric
     ],
-    background: "#1C1B1F",
-    surface: "#252330",
+    background: "#111423",
+    surface: "#1F2840",
   },
   {
     name: "Tropical Forest",
-    seedColor: "#00BFA5",
+    seedColor: "#00A878",
     colors: [
-      "#00BFA5", // Bright Teal
-      "#00897B", // Teal
-      "#C0CA33", // Lime
-      "#4CAF50", // Green
-      "#00E676", // Bright Green
-      "#8BC34A", // Light Green
+      "#00A878", // Tropical green
+      "#2D936C", // Forest green
+      "#1B998B", // Teal lagoon
+      "#2EC4B6", // Aqua mint
+      "#3FA34D", // Leaf green
+      "#1E6F5C", // Deep jungle
     ],
-    background: "#1C1B1F",
-    surface: "#232A28",
+    background: "#101C19",
+    surface: "#1B2D2A",
   },
   {
     name: "Berry Punch",
-    seedColor: "#984061",
+    seedColor: "#C9184A",
     colors: [
-      "#984061", // Raspberry
-      "#E91E63", // Pink-Red
-      "#7B1FA2", // Deep Violet
-      "#F06292", // Soft Coral
-      "#AB47BC", // Medium Purple
-      "#EC407A", // Light Pink
+      "#C9184A", // Berry red
+      "#A4133C", // Dark berry
+      "#7B2CBF", // Purple
+      "#9D4EDD", // Lavender purple
+      "#D81159", // Punch pink
+      "#8E44AD", // Plum
     ],
-    background: "#1C1B1F",
-    surface: "#2A2328",
+    background: "#1B1220",
+    surface: "#2B1D35",
   },
   {
     name: "Fiesta",
-    seedColor: "#FF1744",
+    seedColor: "#FF006E",
     colors: [
-      "#FF1744", // Hot Red
-      "#FF6D00", // Blazing Orange
-      "#FFD600", // Electric Yellow
-      "#00E5FF", // Neon Cyan
-      "#76FF03", // Neon Green
-      "#D500F9", // Neon Purple
+      "#FF006E", // Neon pink
+      "#FB5607", // Bright orange
+      "#FFBE0B", // Pop yellow
+      "#3A86FF", // Electric blue
+      "#06D6A0", // Mint neon
+      "#8338EC", // Neon violet
     ],
-    background: "#0D0D0D",
-    surface: "#1A1A2E",
+    background: "#110F1A",
+    surface: "#1B243A",
   },
 ];
 
